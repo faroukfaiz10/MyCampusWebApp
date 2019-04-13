@@ -1,0 +1,9 @@
+<% include partials/header %>
+<h1>Liste des colis</h1>
+<a href="/packages/new">Ajouter un colis</a>
+<% packagesList.forEach(function(package){ %>
+    <li>
+        <%= package.name %> - <%=package.sender %>
+    </li>
+<%}); %>
+<% include partials/footer %>
