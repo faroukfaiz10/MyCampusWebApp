@@ -1,6 +1,16 @@
 var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
+const { Client } = require('pg')
+const client = new Client({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'mycampus',
+    password: 'root',
+    //port: 3211,
+  })
+
+client.connect()
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
@@ -29,5 +39,10 @@ app.post("/packages", function(req, res){
 app.get("/packages/new", function(req, res){
     res.render("new")
 })
+
+client.query('SELECT * FROM users', (err, res) => {
+    console.log(res.rows[0])
+    client.end()
+  })
 
 app.listen('3000');
