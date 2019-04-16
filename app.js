@@ -16,8 +16,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 packagesList=[
-    {name:"Faiz Farouk", sender:"Colissimo"},
-    {name:"Doubli Youssef", sender:"UPS"},
+    {lastName:"Faiz",firstName:"Farouk",email:"farouk.faiz@imt-atlantique.net", sender:"Colissimo"},
+    {lastName:"Doubli",firstName:"Youssef",email:"youssef.doubli@imt-atlantique.net", sender:"UPS"},
 ];
 
 app.get("/", function(req, res){
@@ -28,21 +28,9 @@ app.get("/packages", function(req, res){
     res.render("packages", {packagesList:packagesList});
 })
 
-app.post("/packages", function(req, res){
-    var name = req.body.name;
-    var sender = req.body.sender
-    var newpackage = {name: name, sender: sender}
-    packagesList.push(newpackage);
-    res.redirect("/packages")
-})
-
-app.get("/packages/new", function(req, res){
-    res.render("new")
-})
-
-client.query('SELECT * FROM users', (err, res) => {
+/*client.query('SELECT * FROM users', (err, res) => {
     console.log(res.rows[0])
     client.end()
-  })
+  })*/
 
 app.listen('3000');

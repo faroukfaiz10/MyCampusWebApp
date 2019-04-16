@@ -1,9 +1,32 @@
 <% include partials/header %>
-<h1>Liste des colis</h1>
-<a href="/packages/new">Ajouter un colis</a>
-<% packagesList.forEach(function(package){ %>
-    <li>
-        <%= package.name %> - <%=package.sender %>
-    </li>
-<%}); %>
+
+<div class="container">
+		<h1>Liste des colis</h1>
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+					  <th scope="col">Id</th>
+					  <th scope="col">Nom</th>
+					  <th scope="col">Prénom</th>
+					  <th scope="col">Email</th>
+					  <th scope="col">Expéditeur</th>
+					</tr>
+				</thead>
+				<tbody>
+                    <% packagesList.forEach(function(package){ %>
+                        <tr>
+                            <th scope="row">#</th>
+                            <td><%=package.lastName %></td>
+                            <td><%=package.firstName %></td>
+                            <td><%=package.email %></td>
+                            <td><%=package.sender %></td>
+                        </tr>
+                    <%}); %>
+				</tbody>
+			</table>
+		  </div>
+	</div>
+
+
 <% include partials/footer %>
