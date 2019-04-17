@@ -15,27 +15,28 @@ client.connect()
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
-packagesList=[
-    {lastName:"Faiz",firstName:"Farouk",email:"farouk.faiz@imt-atlantique.net", sender:"Colissimo"},
-    {lastName:"Doubli",firstName:"Youssef",email:"youssef.doubli@imt-atlantique.net", sender:"UPS"},
-];
+packagesList=[];
 
 app.get("/", function(req, res){
     res.render("landing");
 });
 
 app.get("/packages", function(req, res){
+    client.query('SELECT * FROM colis JOIN students ON students.email_address = colis.email ORDER BY colis_id DESC', (err, res2) => {
+        packagesList = res2.rows;
+    })
     res.render("packages", {packagesList:packagesList});
 })
 
 app.post("/colis", function(req, res){
-    packagesList.push({lastName:"Last name",firstName:"First name", email:req.body.email, sender:req.body.sender})
-    res.redirect("/packages")
+    args = [req.body.email, "En attente", req.body.sender]
+    client.query('INSERT INTO colis (email, status, sender) VALUES ($1, $2, $3)', args, (err, res2) => {
+        res.redirect("/packages")
+    })
 })
 
-/*client.query('SELECT * FROM users', (err, res) => {
-    console.log(res.rows[0])
-    client.end()
-  })*/
+client.query('SELECT * FROM colis JOIN students ON students.email_address = colis.email', (err, res) => {
+    packagesList = res.rows;
+})
 
 app.listen('3000');

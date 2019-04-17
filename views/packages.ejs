@@ -13,23 +13,25 @@
 		</div>
 		<div class="table-responsive">
 			<table class="table table-hover">
-				<thead>
+				<thead class="bg-secondary text-light">
 					<tr>
 					  <th scope="col">Id</th>
 					  <th scope="col">Nom</th>
 					  <th scope="col">Prénom</th>
 					  <th scope="col">Email</th>
-					  <th scope="col">Expéditeur</th>
+						<th scope="col">Expéditeur</th>
+						<th scope="col">Statut</th>
 					</tr>
 				</thead>
 				<tbody>
                     <% packagesList.forEach(function(package){ %>
                         <tr>
-                            <th scope="row">#</th>
-                            <td><%=package.lastName %></td>
-                            <td><%=package.firstName %></td>
+                            <th scope="row"><%=package.colis_id %></th>
+                            <td><%=package.last_name %></td>
+                            <td><%=package.first_name %></td>
                             <td><%=package.email %></td>
-                            <td><%=package.sender %></td>
+														<td><%=package.sender %></td>
+														<td class="text-danger"><%=package.status %></td>
                         </tr>
                     <%}); %>
 				</tbody>
