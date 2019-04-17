@@ -28,6 +28,11 @@ app.get("/packages", function(req, res){
     res.render("packages", {packagesList:packagesList});
 })
 
+app.post("/colis", function(req, res){
+    packagesList.push({lastName:"Last name",firstName:"First name", email:req.body.email, sender:req.body.sender})
+    res.redirect("/packages")
+})
+
 /*client.query('SELECT * FROM users', (err, res) => {
     console.log(res.rows[0])
     client.end()
