@@ -22,21 +22,16 @@ app.get("/", function(req, res){
 });
 
 app.get("/packages", function(req, res){
-    client.query('SELECT * FROM colis JOIN students ON students.email_address = colis.email ORDER BY colis_id DESC', (err, res2) => {
-        packagesList = res2.rows;
+    client.query('SELECT * FROM colis JOIN students ON students.email_address = colis.email ORDER BY colis_id DESC', function(err, allPackages) {
+        res.render("packages", {packagesList:allPackages.rows});
     })
-    res.render("packages", {packagesList:packagesList});
 })
 
-app.post("/colis", function(req, res){
+app.post("/packages", function(req, res){
     args = [req.body.email, "En attente", req.body.sender]
-    client.query('INSERT INTO colis (email, status, sender) VALUES ($1, $2, $3)', args, (err, res2) => {
-        res.redirect("/packages")
-    })
-})
-
-client.query('SELECT * FROM colis JOIN students ON students.email_address = colis.email', (err, res) => {
-    packagesList = res.rows;
+    client.query('INSERT INTO colis (email, status, sender) VALUES ($1, $2, $3)', args, function (err,res2){
+        res.redirect("/packages");
+    });
 })
 
 app.listen('3000');

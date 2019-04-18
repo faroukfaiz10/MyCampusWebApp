@@ -21,6 +21,7 @@
 					  <th scope="col">Email</th>
 						<th scope="col">Expéditeur</th>
 						<th scope="col">Statut</th>
+						<th scope="col"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -32,6 +33,7 @@
                             <td><%=package.email %></td>
 														<td><%=package.sender %></td>
 														<td class="text-danger"><%=package.status %></td>
+														<td><i class="fas fa-pen text-secondary mr-3"></i><i class="fas fa-trash-alt text-secondary"></i></td>
                         </tr>
                     <%}); %>
 				</tbody>
@@ -46,7 +48,7 @@
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<form action="/colis" method="POST">
+					<form action="/packages" method="POST">
 						<div class="modal-body">
 								<div class="form-group">
 									<label for="email">Adresse email</label>
