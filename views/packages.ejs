@@ -6,7 +6,7 @@
 				<h1>Liste des colis</h1>
 			</div>
 			<div class="my-auto p-auto mr-5">
-				<button type="button" data-toggle="modal" data-target="#exampleModal" class="m-auto btn btn-secondary">
+				<button type="button" data-toggle="modal" data-target="#newPackage" class="m-auto btn btn-secondary">
 					Ajouter un colis
 				</button>
 			</div>
@@ -25,21 +25,21 @@
 					</tr>
 				</thead>
 				<tbody>
-                    <% packagesList.forEach(function(package){ %>
-                        <tr>
-                            <th scope="row"><%=package.colis_id %></th>
-                            <td><%=package.last_name %></td>
-                            <td><%=package.first_name %></td>
-                            <td><%=package.email %></td>
-														<td><%=package.sender %></td>
-														<td class="text-danger"><%=package.status %></td>
-														<td><i class="fas fa-pen text-secondary mr-3"></i><i class="fas fa-trash-alt text-secondary"></i></td>
-                        </tr>
-                    <%}); %>
+					<% packagesList.forEach(function(package){ %>
+							<tr>
+									<th scope="row"><%=package.colis_id %></th>
+									<td><%=package.last_name %></td>
+									<td><%=package.first_name %></td>
+									<td><%=package.email %></td>
+									<td><%=package.sender %></td>
+									<td class="text-danger"><%=package.status %></td>
+									<td><a href="#" class="badge badge-secondary mr-3" data-toggle="modal" data-target="#editpackage<%=package.colis_id %>"><i class="fas fa-pen text-light editLink"></i></a><a href="#" class="badge badge-secondary mr-3" data-toggle="modal" data-target="#deletePackage"><i class="fas fa-trash-alt text-light deleteLink"></i></a></td>
+							</tr>
+					<%}); %>
 				</tbody>
 			</table>
 		</div>
-		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
+		<div class="modal fade" id="newPackage" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
