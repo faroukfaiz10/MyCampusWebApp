@@ -26,3 +26,6 @@ body {
     /* To correct the bug of body shifting to left when closing modal*/
     padding: 0 !important ;
 }
+li:hover{
+    cursor: pointer;
+}

@@ -32,6 +32,7 @@ for (var i = 0; i <= rowsPerPage - 1; i++) {
 $($pagesLinks[0]).addClass("bg-dark");
 
 // The previous button is disabled in the beginning
+$previousLink.parent().css("cursor", "default")
 $previousLink.parent().addClass("disabled")
 
 // Event listener on the pages links
@@ -43,13 +44,17 @@ $pagesLinks.on("click", function(event) {
     /* Making the next/previous buttons available/disabled */
     if(actualPage == 1){
         // On the page 1, the button 'previous' is disabled
+        $previousLink.parent().css("cursor", "default")
         $previousLink.parent().addClass("disabled")
     } else if (actualPage == numberOfPages){
         // On the last page, the button 'next' is disabled
+        $nextLink.parent().css("cursor", "default");
         $nextLink.parent().addClass("disabled")
     }
     else{
         // Otherwise, the buttons 'next' and 'previous' are available
+        $previousLink.parent().css("cursor", "pointer")
+        $nextLink.parent().css("cursor", "pointer")
         $previousLink.parent().removeClass("disabled");
         $nextLink.parent().removeClass("disabled")
     }
@@ -87,3 +92,6 @@ $previousLink.on("click", function(){
 // Make the previous/next button look different when disabled
 // "Showing 5 results out of 11"
 // Possibility to modifiy rowsPerPage
+// Not display the blue effect when clicking on a link
+// Search
+// auto completion when entering emails
