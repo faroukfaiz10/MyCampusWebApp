@@ -12,52 +12,78 @@ $('#deletePackage').on('show.bs.modal', function (event) {
     $(this).find("form").attr("action", "/packages/delete/" + colis_id);
 });
 
-
-var $tableRows = $('table tbody tr');
-var $allLinks = $('ul.pagination li a')
-var $pagesLinks = $('ul.pagination li a.page-mumber')
-var $nextLink = $($allLinks[$allLinks.length-1])
+var $tableRows    = $('table tbody tr');
+var $allLinks     = $('ul.pagination li a') // $allLinks = $pagesLinks + $nextLink + $previousLink
+var $pagesLinks   = $('ul.pagination li a.page-mumber')
+var $nextLink     = $($allLinks[$allLinks.length-1])
 var $previousLink = $($allLinks[0])
-var actualPage = 1
-var rowsPerPage = 5
-var numberOfRows = $('ul.pagination').data("number_of_rows")
+var actualPage    = 1
+var rowsPerPage   = 5
+var numberOfRows  = $('ul.pagination').data("number_of_rows")
 var numberOfPages = Math.ceil(numberOfRows/rowsPerPage)
 
+// Start by hiding all rows
 $('table').find('tbody tr').hide();
 for (var i = 0; i <= rowsPerPage - 1; i++) {
     $($tableRows[i]).show();
 }
+
+// Start by making the page 1 link look active
 $($pagesLinks[0]).addClass("bg-dark");
+
+// The previous button is disabled in the beginning
 $previousLink.parent().addClass("disabled")
 
-// ADD COMMENTS 
+// Event listener on the pages links
 $pagesLinks.on("click", function(event) {
     actualPage = $(this).text()
+    // Start by hiding all rows
+    $('table').find('tbody tr').hide();
+
+    /* Making the next/previous buttons available/disabled */
     if(actualPage == 1){
+        // On the page 1, the button 'previous' is disabled
         $previousLink.parent().addClass("disabled")
     } else if (actualPage == numberOfPages){
+        // On the last page, the button 'next' is disabled
         $nextLink.parent().addClass("disabled")
     }
     else{
+        // Otherwise, the buttons 'next' and 'previous' are available
         $previousLink.parent().removeClass("disabled");
         $nextLink.parent().removeClass("disabled")
     }
+
+    //Make all pages links not looking active
     for (var i=0; i<$pagesLinks.length; i++){
         $($pagesLinks[i]).removeClass("bg-dark");
     }
+
+    //Make the actual page link look active 
     $(this).toggleClass("bg-dark");
-    $('table').find('tbody tr').hide();
     var beginNumber = (actualPage - 1) * rowsPerPage;
     var endNumber = actualPage * rowsPerPage - 1;
+
+    // Show the concerned rows
     for (var i = beginNumber; i <= endNumber; i++) {
         $($tableRows[i]).show();
     }
 });
 
 $nextLink.on("click", function(){
+    // Trigger the next page link
     $($pagesLinks[actualPage]).trigger("click")
 })
 
 $previousLink.on("click", function(){
+    // Trigger the previous page link
     $($pagesLinks[actualPage - 2]).trigger("click")
 })
+
+
+
+/* TO DOs */
+
+// Make the previous/next button look different when disabled
+// "Showing 5 results out of 11"
+// Possibility to modifiy rowsPerPage
