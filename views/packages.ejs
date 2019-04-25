@@ -40,7 +40,7 @@
 										<a href="#" class="badge badge-secondary mr-3 mb-1" data-id="<%=package.colis_id %>" data-email="<%=package.email %>" data-sender="<%=package.sender %>"data-toggle="modal" data-target="#modifyPackage">
 											<i class="fas fa-pen text-light editLink"></i>
 										</a>
-										<a href="#" class="badge badge-secondary" data-package="<%=package.colis_id %>">
+										<a href="#" class="badge badge-secondary" data-id="<%=package.colis_id %>" data-toggle="modal" data-target="#deletePackage">
 											<i class="fas fa-trash-alt text-light deleteLink"></i>
 										</a>
 									</td>
@@ -109,6 +109,30 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Modal for deleting a package-->
+		<div class="modal fade" id="deletePackage" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Modifier le colis</h5>
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form action="" method="POST">
+						<div class="modal-body">
+							<p>Êtes-vous sûrs de bien vouloir supprimer ce colis ?</p>
+						</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+						<input type="submit" class="btn btn-secondary" value="Supprimer">
+					</div>
+				</form>
+				</div>
+			</div>
+		</div>
+
 	</div>
 	<script src="/js/table.js"></script>
 <% include partials/footer %>

@@ -6,3 +6,8 @@ $('#modifyPackage').on('show.bs.modal', function (event) {
     $(this).find(".form-group input[type=email]").val(email);
     $(this).find("form").attr("action", "/packages/" + colis_id);
 });
+
+$('#deletePackage').on('show.bs.modal', function (event) {
+    colis_id = $(event.relatedTarget).data("id");
+    $(this).find("form").attr("action", "/packages/delete/" + colis_id);
+});

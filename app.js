@@ -71,4 +71,19 @@ app.post("/packages/:id", function(req, res){
     });
 })
 
+app.post("/packages/delete/:id", function(req, res){
+    // Data received from the form
+    args = [req.params.id]
+    // Adding data to packages table
+    client.query('delete from colis where colis_id = $1;', args, function (err,res2){
+        if (err){
+            console.log(err);
+        } else{
+            // Redirecting to packages page to display the package just added
+            res.redirect("/packages");
+        }
+    });
+})
+
+
 app.listen('3000');
