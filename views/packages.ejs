@@ -53,12 +53,11 @@
 		<!-- Pagination-->
 		<nav>
 			<ul class="pagination justify-content-center" data-number_of_rows="<%=numberOfRows %>">
-				<li class="page-item"><a class="page-link bg-secondary text-light" href="#">Previous</a></li>
-				<% for(var i=1; i <= numberOfRows; i++){ %>
-					<!-- To change later to iterate to numberOfRows/rowsPerPage-->
-					<li class="page-item"><a class="page-link bg-secondary text-light" href="#"><%= i %></a></li>
+				<li class="page-item"><a class="page-link bg-secondary text-light" href="#">Précédent</a></li>
+				<% for(var i=1; i <= Math.ceil(numberOfRows/5); i++){ %>
+					<li class="page-item"><a class="page-link bg-secondary text-light page-mumber" href="#"><%= i %></a></li>
 				<% }; %>
-				<li class="page-item"><a class="page-link bg-secondary text-light" href="#">Next</a></li>
+				<li class="page-item"><a class="page-link bg-secondary text-light" href="#">Suivant</a></li>
 			</ul>
 		</nav>
 
