@@ -23,8 +23,6 @@ app.use(express.static(__dirname + "/public"));
 // For using EJS to generate html documents
 app.set("view engine", "ejs");
 
-packagesList=[];
-
 // Index page
 app.get("/", function(req, res){
     res.render("landing");
@@ -36,8 +34,14 @@ app.get("/packages", function(req, res){
         if(err){
             console.log(err);
         } else{
-            // Render the 'packages' page after retrieving data
-            res.render("packages", {packagesList:allPackages.rows});
+            client.query('SELECT COUNT(*) FROM colis',function(err2,countRows) {
+                if (err2){
+                    console.log(err2);
+                } else{
+                    // Render the 'packages' page after retrieving data and number of rows
+                    res.render("packages", {packagesList:allPackages.rows, numberOfRows:countRows.rows[0].count});
+                }
+            })
         }
     })
 })
@@ -57,6 +61,7 @@ app.post("/packages", function(req, res){
     });
 })
 
+// Post request after editing a package
 app.post("/packages/:id", function(req, res){
     // Data received from the form
     args = [req.body.email, req.body.sender, req.params.id]
@@ -71,6 +76,7 @@ app.post("/packages/:id", function(req, res){
     });
 })
 
+// Postrequest after deleting a package
 app.post("/packages/delete/:id", function(req, res){
     // Data received from the form
     args = [req.params.id]

@@ -11,3 +11,5 @@ $('#deletePackage').on('show.bs.modal', function (event) {
     colis_id = $(event.relatedTarget).data("id");
     $(this).find("form").attr("action", "/packages/delete/" + colis_id);
 });
+
+console.log($('ul.pagination').data("number_of_rows"))
