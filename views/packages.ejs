@@ -1,7 +1,7 @@
 <% include partials/header %>
 
 <div class="container">
-	
+
 		<div class="d-flex bd-highlight mb-3">
 			<div class="mr-auto p-2">
 				<h1>Liste des colis</h1>
@@ -36,7 +36,14 @@
 									<td><%=package.email %></td>
 									<td><%=package.sender %></td>
 									<td class="text-danger"><%=package.status %></td>
-									<td><a href="#" class="badge badge-secondary mr-3" data-toggle="modal" data-target="#editpackage<%=package.colis_id %>"><i class="fas fa-pen text-light editLink"></i></a><a href="#" class="badge badge-secondary mr-3" data-toggle="modal" data-target="#deletePackage"><i class="fas fa-trash-alt text-light deleteLink"></i></a></td>
+									<td>
+										<a href="#" class="badge badge-secondary mr-3 mb-1" data-id="<%=package.colis_id %>" data-email="<%=package.email %>" data-sender="<%=package.sender %>"data-toggle="modal" data-target="#modifyPackage">
+											<i class="fas fa-pen text-light editLink"></i>
+										</a>
+										<a href="#" class="badge badge-secondary" data-package="<%=package.colis_id %>">
+											<i class="fas fa-trash-alt text-light deleteLink"></i>
+										</a>
+									</td>
 							</tr>
 					<%}); %>
 				</tbody>
@@ -72,7 +79,36 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Modal for modifying a package-->
+		<div class="modal fade" id="modifyPackage" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Modifier le colis</h5>
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form action="" method="POST">
+						<div class="modal-body">
+								<div class="form-group">
+									<label for="email">Adresse email</label>
+									<input type="email" class="form-control" id="email" placeholder="prenom.nom@imt-atlantique.net" name="email">
+								</div>
+								<div class="form-group">
+									<label for="sender">Expéditeur</label>
+									<input type="text" class="form-control" id="ender" name="sender">
+								</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+						<input type="submit" class="btn btn-secondary" value="Confirmer">
+					</div>
+				</form>
+				</div>
+			</div>
+		</div>
 	</div>
-
-
+	<script src="/js/table.js"></script>
 <% include partials/footer %>
