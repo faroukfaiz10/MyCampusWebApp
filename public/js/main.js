@@ -85,15 +85,13 @@ $previousLink.on("click", function(){
     $($pagesLinks[actualPage - 2]).trigger("click")
 })
 
-var allEmails = []
-
-$.get("/getPackages", function(data){
-    // Shorten this code ??!
+//Autocompletion for emails
+$.get("/emails", function(data){
     data.rows.forEach(function(emailObject){
-        if (emailObject.hasOwnProperty("email_address") && emailObject.email_address != null ) $("#studentsData").append("<option>"+emailObject.email_address+"</option>")
+        if (emailObject.hasOwnProperty("email_address") && emailObject.email_address != null ){
+            $("#studentsData").append("<option>"+emailObject.email_address+"</option>")
+        } 
     })
-    console.log(allEmails[0])
-    
 })
 
     

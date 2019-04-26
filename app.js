@@ -1,11 +1,12 @@
 var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
-const { Client } = require('pg')
+const { Client } = require('pg');
+require("dotenv").config();
 
 // Informations for connecting to database
 const client = new Client({
-    connectionString: "postgres://uqvdtwfrgprpiu:e38b4d2280afdbd47a58c205a65af5c3abeb07c3892066cbe4c7ba046643b604@ec2-54-247-82-210.eu-west-1.compute.amazonaws.com:5432/d49o42sht2rmp9",
+    connectionString: process.env.URL,
     ssl: true,
   })
 
@@ -82,7 +83,7 @@ app.post("/packages/delete/:id", function(req, res){
     });
 })
 
-app.get("/getPackages", function(req,res){
+app.get("/emails", function(req,res){
     client.query('SELECT email_address FROM students', function(err, allEmails) {
         if(err){
             console.log(err);
