@@ -5,11 +5,8 @@ const { Client } = require('pg')
 
 // Informations for connecting to database
 const client = new Client({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'mycampus',
-    password: 'root',
-    //port: 3211,
+    connectionString: "postgres://uqvdtwfrgprpiu:e38b4d2280afdbd47a58c205a65af5c3abeb07c3892066cbe4c7ba046643b604@ec2-54-247-82-210.eu-west-1.compute.amazonaws.com:5432/d49o42sht2rmp9",
+    ssl: true,
   })
 
 client.connect()
@@ -34,14 +31,8 @@ app.get("/packages", function(req, res){
         if(err){
             console.log(err);
         } else{
-            client.query('SELECT COUNT(*) FROM colis',function(err2,countRows) {
-                if (err2){
-                    console.log(err2);
-                } else{
-                    // Render the 'packages' page after retrieving data and number of rows
-                    res.render("packages", {packagesList:allPackages.rows, numberOfRows:countRows.rows[0].count});
-                }
-            })
+            // Render the 'packages' page after retrieving data and number of rows
+            res.render("packages", {packagesList:allPackages.rows, numberOfRows:allPackages.rows.length});
         }
     })
 })
@@ -89,6 +80,16 @@ app.post("/packages/delete/:id", function(req, res){
             res.redirect("/packages");
         }
     });
+})
+
+app.get("/getPackages", function(req,res){
+    client.query('SELECT email_address FROM students', function(err, allEmails) {
+        if(err){
+            console.log(err);
+        } else{
+            res.send(allEmails)            
+        }
+    })
 })
 
 app.listen('3000');

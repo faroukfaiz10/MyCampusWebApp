@@ -85,8 +85,18 @@ $previousLink.on("click", function(){
     $($pagesLinks[actualPage - 2]).trigger("click")
 })
 
+var allEmails = []
 
+$.get("/getPackages", function(data){
+    // Shorten this code ??!
+    data.rows.forEach(function(emailObject){
+        if (emailObject.hasOwnProperty("email_address") && emailObject.email_address != null ) $("#studentsData").append("<option>"+emailObject.email_address+"</option>")
+    })
+    console.log(allEmails[0])
+    
+})
 
+    
 /* TO DOs */
 
 // Make the previous/next button look different when disabled
