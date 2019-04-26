@@ -92,7 +92,7 @@ $.get("/emails", function(data){
         // Some emails are set to null
         if (emailObject.hasOwnProperty("email_address") && emailObject.email_address != null ){ 
             allEmails.push(emailObject.email_address)
-        } 
+        }
     })
     $(".email").typeahead({source:allEmails, items:5, fitToElement:true});
 })
