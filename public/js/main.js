@@ -102,6 +102,4 @@ $.get("/emails", function(data){
 // Make the previous/next button look different when disabled
 // "Showing 5 results out of 11"
 // Possibility to modifiy rowsPerPage
-// Not display the blue effect when clicking on a link
 // Search
-// auto completion when entering emails
