@@ -87,14 +87,16 @@ $previousLink.on("click", function(){
 
 //Autocompletion for emails
 $.get("/emails", function(data){
+    var allEmails=[];
     data.rows.forEach(function(emailObject){
-        if (emailObject.hasOwnProperty("email_address") && emailObject.email_address != null ){
-            $("#studentsData").append("<option>"+emailObject.email_address+"</option>")
+        // Some emails are set to null
+        if (emailObject.hasOwnProperty("email_address") && emailObject.email_address != null ){ 
+            allEmails.push(emailObject.email_address)
         } 
     })
+    $(".email").typeahead({source:allEmails, items:5, fitToElement:true});
 })
 
-    
 /* TO DOs */
 
 // Make the previous/next button look different when disabled
