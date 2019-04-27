@@ -55,7 +55,7 @@
 		<nav>
 			<div class="d-flex align-items-center mb-5">
 				<div class="ml-2 float-left">
-					<p class="my-auto"><5 résultats sur <%= numberOfRows %></p>
+					<p class="my-auto"><span id="rows_displayed"></span> résultats sur <%= numberOfRows %></p>
 				</div>
 				<div class="mx-auto">
 					<ul class="pagination my-auto" data-number_of_rows="<%=numberOfRows %>">
@@ -64,9 +64,11 @@
 				</div>
 				<div class="my-auto">
 					<select class="custom-select custom-select-sm" id="rows_per_page">
-						<option selected value="5">5</option>
-						<option value="10">10</option>
+						<option value="5">5</option>
+						<option selected value="10">10</option>
 						<option value="20">20</option>
+						<option value="50">50</option>
+						<option value="100">100</option>
 					</select>
 				</div>
 			</div>

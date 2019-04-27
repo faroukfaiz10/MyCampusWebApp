@@ -15,7 +15,7 @@ $('#deletePackage').on('show.bs.modal', function (event) {
     $(this).find("form").attr("action", "/packages/delete/" + colis_id);
 });
 
-var rowsPerPage   = 5  // Starting value
+var rowsPerPage   = 10  // Starting value
 var numberOfRows  = $('ul.pagination').data("number_of_rows")
 var numberOfPages = Math.ceil(numberOfRows/rowsPerPage)
 var $tableRows    = $('table tbody tr');
@@ -75,8 +75,12 @@ function eventsHandlingLinks(){
 
         //Make the actual page link look active 
         $(this).toggleClass("bg-dark");
+
         var beginNumber = (actualPage - 1) * rowsPerPage;
-        var endNumber = actualPage * rowsPerPage - 1;
+        var endNumber   = Math.min(actualPage * rowsPerPage - 1, $tableRows.length - 1);
+        console.log(beginNumber, endNumber)
+        rowsDisplayed = endNumber - beginNumber + 1;
+        $("#rows_displayed").text(rowsDisplayed);
 
         // Show the concerned rows
         for (var i = beginNumber; i <= endNumber; i++) {
@@ -95,11 +99,14 @@ function eventsHandlingLinks(){
     })
 }
 
-// Start by hiding all rows
+// Start by hiding all rows then showing the first rowsPerPage ones
 $('table').find('tbody tr').hide();
 for (var i = 0; i <= rowsPerPage - 1; i++) {
     $($tableRows[i]).show();
 }
+
+var rowsDisplayed = Math.min($tableRows.length,rowsPerPage)
+$("#rows_displayed").text(rowsDisplayed);
 
 // Start by making the page 1 link look active
 $($pagesLinks[0]).addClass("bg-dark");
@@ -132,6 +139,8 @@ $('.custom-select').on("change", function(){
     $($pagesLinks[0]).addClass("bg-dark"); // Page 1 link looks active
     $previousLink.parent().css("cursor", "default") // The previous button is disabled in the beginning
     $previousLink.parent().addClass("disabled")
+    rowsDisplayed = Math.min($tableRows.length,rowsPerPage)
+    $("#rows_displayed").text(rowsDisplayed);
     eventsHandlingLinks()
 })
 
@@ -152,8 +161,6 @@ $.get("/emails", function(data){
 /* TO DOs */
 
 // Make the previous/next button look different when disabled
-// "Showing 5 results out of 11"
-// Possibility to modifiy rowsPerPage
 // Search
 // max length input (30 chars expediteur)
 // Set the default value of the select input to 10 ? Or store it somewhere to retrieve it after reloading the page.
