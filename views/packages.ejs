@@ -55,22 +55,19 @@
 		<nav>
 			<div class="d-flex align-items-center">
 				<div class="ml-2 float-left">
-					<p>5 résultats sur <%=numberOfRows %></p>
+					<p class="my-auto"><5 résultats sur <%=numberOfRows %></p>
 				</div>
 				<div class="mx-auto">
-					<ul class="pagination " data-number_of_rows="<%=numberOfRows %>">
-						<li class="page-item">
-							<a class="page-link bg-secondary text-light">Précédent</a>
-						</li>
-						<% for(var i=1; i <= Math.ceil(numberOfRows/5); i++){ %>
-							<li class="">
-								<a class="page-link bg-secondary text-light page-mumber"><%= i %></a>
-							</li>
-						<% }; %>
-						<li class="page-item">
-							<a class="page-link bg-secondary text-light">Suivant</a>
-						</li>
+					<ul class="pagination my-auto" data-number_of_rows="<%=numberOfRows %>">
+						<!--Here goes all the pages links-->
 					</ul>
+				</div>
+				<div class="my-auto">
+					<select class="custom-select custom-select-sm" id="rows_per_page">
+						<option selected value="5">5</option>
+						<option value="10">10</option>
+						<option value="20">20</option>
+					</select>
 				</div>
 			</div>
 		</nav>
