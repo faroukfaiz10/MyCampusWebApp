@@ -32,6 +32,12 @@ app.get("/packages", function(req, res){
         if(err){
             console.log(err);
         } else{
+            packagesList=[]
+            // Add the (key,value) pair for shortDate format to all packages
+            allPackages.rows.forEach(function(package){
+                package.shortDate = shortDateFormat(package.date);
+                packagesList.push(package)
+            })
             // Render the 'packages' page after retrieving data and number of rows
             res.render("packages", {packagesList:allPackages.rows, numberOfRows:allPackages.rows.length});
         }
@@ -58,7 +64,7 @@ app.post("/packages/:id", function(req, res){
     // Data received from the form
     args = [req.body.email, req.body.sender, req.params.id]
     // Adding data to packages table
-    client.query('update colis set email = $1, sender = $2 where colis_id = $3;', args, function (err,res2){
+    client.query('UPDATE colis SET email = $1, sender = $2 WHERE colis_id = $3;', args, function (err,res2){
         if (err){
             console.log(err);
         } else{
@@ -73,7 +79,7 @@ app.post("/packages/delete/:id", function(req, res){
     // Data received from the form
     args = [req.params.id]
     // Adding data to packages table
-    client.query('delete from colis where colis_id = $1;', args, function (err,res2){
+    client.query('DELETE FROM colis WHERE colis_id = $1;', args, function (err,res2){
         if (err){
             console.log(err);
         } else{
@@ -83,6 +89,7 @@ app.post("/packages/delete/:id", function(req, res){
     });
 })
 
+// Post request from front-end java script to get emails for Typeahead functionality
 app.get("/emails", function(req,res){
     client.query('SELECT email_address FROM students', function(err, allEmails) {
         if(err){
@@ -92,5 +99,11 @@ app.get("/emails", function(req,res){
         }
     })
 })
+
+// Get short date format from long date format
+function shortDateFormat(longDate){
+    let month = longDate.getMonth()+1
+    return  longDate.getDate()+"/"+month+"/"+longDate.getFullYear()
+}
 
 app.listen('3000');

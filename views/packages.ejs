@@ -24,7 +24,7 @@
 					  <th scope="col">Prénom</th>
 					  <th scope="col">Email</th>
 						<th scope="col">Expéditeur</th>
-						<th scope="col">Statut</th>
+						<th scope="col">Date</th>
 						<th scope="col"></th>
 					</tr>
 				</thead>
@@ -36,7 +36,7 @@
 									<td><%=package.first_name %></td>
 									<td><%=package.email %></td>
 									<td><%=package.sender %></td>
-									<td class="text-danger"><%=package.status %></td>
+									<td><%=package.shortDate %></td>
 									<td>
 										<a href="#" class="badge badge-secondary mr-3 mb-1" data-id="<%=package.colis_id %>" data-email="<%=package.email %>" data-sender="<%=package.sender %>"data-toggle="modal" data-target="#modifyPackage">
 											<i class="fas fa-pen text-light editLink"></i>
@@ -55,7 +55,7 @@
 		<nav>
 			<div class="d-flex align-items-center">
 				<div class="ml-2 float-left">
-					<p class="my-auto"><5 résultats sur <%=numberOfRows %></p>
+					<p class="my-auto"><5 résultats sur <%= numberOfRows %></p>
 				</div>
 				<div class="mx-auto">
 					<ul class="pagination my-auto" data-number_of_rows="<%=numberOfRows %>">

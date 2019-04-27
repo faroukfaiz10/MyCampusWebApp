@@ -164,3 +164,4 @@ $.get("/emails", function(data){
 // "Showing 5 results out of 11"
 // Possibility to modifiy rowsPerPage
 // Search
+// max length input (30 chars expediteur)
