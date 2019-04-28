@@ -24,7 +24,7 @@
 					  	<th scope="col">Prénom</th>
 					  	<th scope="col">Email</th>
 						<th scope="col">Expéditeur</th>
-						<th scope="col">Location</th>
+						<th scope="col">Localisation</th>
 						<th scope="col">Date</th>
 						<th scope="col">Commentaire</th>
 						<th scope="col"></th>
@@ -32,15 +32,15 @@
 				</thead>
 				<tbody>
 					<% packagesList.forEach(function(package){ %>
-							<tr>
-								<th scope="row"><%=package.colis_id %></th>
-								<td><%=package.last_name %></td>
-								<td><%=package.first_name %></td>
-								<td><%=package.email %></td>
-								<td><%=package.sender %></td>
-								<td><%=package.location %></td>
-								<td><%=package.shortDate %></td>
-								<td><%=package.comment %></td>
+							<tr >
+								<td class="align-middle"><strong><%=package.colis_id %></strong></td> <!--<th scope="row">-->
+								<td class="align-middle"><%=package.last_name %></td>
+								<td class="align-middle"><%=package.first_name %></td>
+								<td class="align-middle"><%=package.email %></td>
+								<td class="align-middle"><%=package.sender %></td>
+								<td class="align-middle"><%=package.location %></td>
+								<td class="align-middle"><%=package.shortDate %></td>
+								<td class="align-middle"><%=package.comment %></td>
 								<td>
 									<a href="#" class="badge badge-secondary mr-3 mb-1" data-id="<%=package.colis_id %>" data-email="<%=package.email %>" data-sender="<%=package.sender %>" data-location="<%=package.location %>" data-toggle="modal" data-target="#modifyPackage">
 										<i class="fas fa-pen text-light editLink"></i>
@@ -98,7 +98,7 @@
 								<label for="add_sender">Expéditeur</label>
 								<input type="text" class="form-control" id="add_sender" name="sender">
 							</div>
-							<label class="my-auto mr-5">Location</label>
+							<label class="my-auto mr-5">Localisation</label>
 							<div class="form-inline mt-2 ml-2">
 								<div class="form-group form-check mr-auto">
 									<input class="form-check-input" type="radio" name="location" id="add_foyer" value="Foyer" checked>
@@ -146,7 +146,7 @@
 								<label for="modify_sender">Expéditeur</label>
 								<input type="text" class="form-control" id="modify_sender" name="sender">
 							</div>
-							<label class="my-auto mr-5">Location</label>
+							<label class="my-auto mr-5">Localisation</label>
 							<div class="form-inline mt-2 ml-2">
 								<div class="form-group form-check mr-auto">
 									<input class="form-check-input" type="radio" name="location" id="modify_foyer" value="Foyer">
