@@ -1,9 +1,26 @@
+var $radioButtons = $("input[type=radio][name=location]")
+
 // Set the inputs values in the modify modal to the actual values of the package to modify
 $('#modifyPackage').on('show.bs.modal', function (event) {
-    email = $(event.relatedTarget).data("email");
-    sender = $(event.relatedTarget).data("sender");
+    email    = $(event.relatedTarget).data("email");
+    sender   = $(event.relatedTarget).data("sender");
     colis_id = $(event.relatedTarget).data("id");
-    $(this).find(".form-group input[type=text]").val(sender);
+    // Ckeck the correct radiobutton
+    loc = $(event.relatedTarget).data("location");
+    if (loc == "Foyer"){
+        $($radioButtons[3]).prop("checked", true);
+        $("#modify_autre_input").attr("disabled",true);
+        $("#modify_autre_input").val("");
+    } else if (loc == "Boîte aux lettres"){
+        $($radioButtons[4]).prop("checked", true);
+        $("#modify_autre_input").attr("disabled",true);
+        $("#modify_autre_input").val("");
+    } else {
+        $($radioButtons[5]).prop("checked", true);
+        $("#modify_autre_input").attr("disabled",false);
+        $("#modify_autre_input").val(loc);
+    }
+    $(this).find("input[type=text][name=sender]").val(sender);
     $(this).find(".form-group input[type=email]").val(email);
     // Set the post request path
     $(this).find("form").attr("action", "/packages/" + colis_id);
@@ -15,11 +32,30 @@ $('#deletePackage').on('show.bs.modal', function (event) {
     $(this).find("form").attr("action", "/packages/delete/" + colis_id);
 });
 
+
 var rowsPerPage   = 10  // Starting value
 var numberOfRows  = $('ul.pagination').data("number_of_rows")
 var numberOfPages = Math.ceil(numberOfRows/rowsPerPage)
 var $tableRows    = $('table tbody tr');
 var pagesHtml     = ""
+
+// For controling the 'other' input on the add and modify modals
+$radioButtons.on("change",function(){
+    // Create modal
+	if ($($radioButtons[2]).is(":checked")){
+		$("#add_autre_input").attr("disabled",false);
+    } else{
+        $("#add_autre_input").attr("disabled",true);
+        $("#add_autre_input").val("");
+    }
+    // Modify modal
+    if ($($radioButtons[5]).is(":checked")){
+		$("#modify_autre_input").attr("disabled",false);
+    } else{
+        $("#modify_autre_input").attr("disabled",true);
+        $("#modify_autre_input").val("");
+    }
+})
 
 // Generating Html for the pages links
 function pagesLinksHtml (){
@@ -78,7 +114,6 @@ function eventsHandlingLinks(){
 
         var beginNumber = (actualPage - 1) * rowsPerPage;
         var endNumber   = Math.min(actualPage * rowsPerPage - 1, $tableRows.length - 1);
-        console.log(beginNumber, endNumber)
         rowsDisplayed = endNumber - beginNumber + 1;
         $("#rows_displayed").text(rowsDisplayed);
 
@@ -148,7 +183,7 @@ $('.custom-select').on("change", function(){
 $.get("/emails", function(data){
     var allEmails=[];
     data.rows.forEach(function(emailObject){
-        // Some emails are set to null
+        // Some emails are equal to null
         if (emailObject.hasOwnProperty("email_address") && emailObject.email_address != null ){ 
             allEmails.push(emailObject.email_address)
         }
@@ -165,3 +200,9 @@ $.get("/emails", function(data){
 // max length input (30 chars expediteur)
 // Set the default value of the select input to 10 ? Or store it somewhere to retrieve it after reloading the page.
 // Problem when setting rowsperpage to 10 then reloading page : it stays at 10 without and displays only 5 + dosen't do nothing if we click on 10 again
+// calculate numberOfRows by front js
+// Date
+// Comment
+// compact-large
+// Tooltips
+// Email verification

@@ -1,8 +1,12 @@
 var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
+var request = require('request');
 const { Client } = require('pg');
 require("dotenv").config();
+
+//Send a ping to the chatbot server
+request.post("https://mycampus-imt.herokuapp.com/ping")
 
 // Informations for connecting to database
 const client = new Client({
@@ -39,17 +43,28 @@ app.get("/packages", function(req, res){
                 packagesList.push(package)
             })
             // Render the 'packages' page after retrieving data and number of rows
-            res.render("packages", {packagesList:allPackages.rows, numberOfRows:allPackages.rows.length});
+            res.render("packages", {packagesList:packagesList, numberOfRows:allPackages.rows.length});
         }
     })
 })
 
+// Function for getting location
+function getLocation(locationObject){
+    if (locationObject[0] == "autre"){
+        return locationObject[1]
+    } else{
+        return locationObject
+    }
+}
+
+
 // Post request after adding new package
 app.post("/packages", function(req, res){
     // Data received from the form
-    args = [req.body.email, "En attente", req.body.sender]
+    args = [req.body.email, "En attente", req.body.sender, getLocation(req.body.location)]
+    // location: [ 'autre', 'Maisel' ] location: [ 'foyer', '' ] }
     // Adding data to packages table
-    client.query('INSERT INTO colis (email, status, sender) VALUES ($1, $2, $3)', args, function (err,res2){
+    client.query('INSERT INTO colis (email, status, sender, location) VALUES ($1, $2, $3, $4)', args, function (err,res2){
         if (err){
             console.log(err);
         } else{
