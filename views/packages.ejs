@@ -2,201 +2,207 @@
 
 <div class="container ">
 
-		<!-- Header-->
-		<div class="d-flex bd-highlight mb-3">
-			<div class="mr-auto p-2">
-				<h1>Liste des colis</h1>
+	<!-- Header-->
+	<div class="d-flex bd-highlight mb-3">
+		<div class="mr-auto p-2">
+			<h1>Liste des colis</h1>
+		</div>
+		<div class="my-auto p-auto mr-5">
+			<button type="button" data-toggle="modal" data-target="#newPackage" class="m-auto btn btn-secondary">
+				Ajouter un colis
+			</button>
+		</div>
+	</div>
+
+	<!-- EJS template for adding a row -->
+	<div class="table-responsive">
+		<table class="table table-hover table-sm">
+			<thead class="bg-secondary text-light">
+				<tr>
+					<th scope="col">Id</th>
+					<th scope="col">Nom</th>
+					<th scope="col">Prénom</th>
+					<th scope="col">Email</th>
+					<th scope="col">Expéditeur</th>
+					<th scope="col">Localisation</th>
+					<th scope="col">Date</th>
+					<th scope="col">Commentaire</th>
+					<th scope="col"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<% packagesList.forEach(function(package){ %>
+						<tr >
+							<td class="align-middle"><strong><%=package.colis_id %></strong></td> <!--<th scope="row">-->
+							<td class="align-middle"><%=package.last_name %></td>
+							<td class="align-middle"><%=package.first_name %></td>
+							<td class="align-middle"><%=package.email %></td>
+							<td class="align-middle"><%=package.sender %></td>
+							<td class="align-middle"><%=package.location %></td>
+							<td class="align-middle"><%=package.shortDate %></td>
+							<td class="align-middle"><%=package.comment %></td>
+							<td>
+								<a href="#" class="badge badge-secondary mr-3 mb-1" data-id="<%=package.colis_id %>" data-email="<%=package.email %>" data-sender="<%=package.sender %>" data-location="<%=package.location %>" data-toggle="modal" data-target="#modifyPackage">
+									<i class="fas fa-pen text-light editLink"></i>
+								</a>
+								<a href="#" class="badge badge-secondary" data-id="<%=package.colis_id %>" data-toggle="modal" data-target="#deletePackage">
+									<i class="fas fa-trash-alt text-light deleteLink"></i>
+								</a>
+							</td>
+						</tr>
+				<%}); %>
+			</tbody>
+		</table>
+	</div>
+	
+	<!-- Footer-->
+	<nav>
+		<div class="d-flex align-items-center mb-5">
+			<div class="ml-2 float-left">
+				<p class="my-auto"><span id="rows_displayed"></span> résultats sur <%= numberOfRows %></p>
 			</div>
-			<div class="my-auto p-auto mr-5">
-				<button type="button" data-toggle="modal" data-target="#newPackage" class="m-auto btn btn-secondary">
-					Ajouter un colis
-				</button>
+			<div class="mx-auto">
+				<ul class="pagination my-auto" data-number_of_rows="<%=numberOfRows %>">
+					<!--Here goes all the pages links-->
+				</ul>
+			</div>
+			<div class="my-auto">
+				<select class="custom-select custom-select-sm" id="rows_per_page">
+					<option value="5">5</option>
+					<option selected value="10">10</option>
+					<option value="20">20</option>
+					<option value="50">50</option>
+					<option value="100">100</option>
+				</select>
 			</div>
 		</div>
+	</nav>
 
-		<!-- EJS template for adding a row -->
-		<div class="table-responsive">
-			<table class="table table-hover table-sm">
-				<thead class="bg-secondary text-light">
-					<tr>
-					  	<th scope="col">Id</th>
-					  	<th scope="col">Nom</th>
-					  	<th scope="col">Prénom</th>
-					  	<th scope="col">Email</th>
-						<th scope="col">Expéditeur</th>
-						<th scope="col">Localisation</th>
-						<th scope="col">Date</th>
-						<th scope="col">Commentaire</th>
-						<th scope="col"></th>
-					</tr>
-				</thead>
-				<tbody>
-					<% packagesList.forEach(function(package){ %>
-							<tr >
-								<td class="align-middle"><strong><%=package.colis_id %></strong></td> <!--<th scope="row">-->
-								<td class="align-middle"><%=package.last_name %></td>
-								<td class="align-middle"><%=package.first_name %></td>
-								<td class="align-middle"><%=package.email %></td>
-								<td class="align-middle"><%=package.sender %></td>
-								<td class="align-middle"><%=package.location %></td>
-								<td class="align-middle"><%=package.shortDate %></td>
-								<td class="align-middle"><%=package.comment %></td>
-								<td>
-									<a href="#" class="badge badge-secondary mr-3 mb-1" data-id="<%=package.colis_id %>" data-email="<%=package.email %>" data-sender="<%=package.sender %>" data-location="<%=package.location %>" data-toggle="modal" data-target="#modifyPackage">
-										<i class="fas fa-pen text-light editLink"></i>
-									</a>
-									<a href="#" class="badge badge-secondary" data-id="<%=package.colis_id %>" data-toggle="modal" data-target="#deletePackage">
-										<i class="fas fa-trash-alt text-light deleteLink"></i>
-									</a>
-								</td>
-							</tr>
-					<%}); %>
-				</tbody>
-			</table>
-		</div>
-		
-		<!-- Footer-->
-		<nav>
-			<div class="d-flex align-items-center mb-5">
-				<div class="ml-2 float-left">
-					<p class="my-auto"><span id="rows_displayed"></span> résultats sur <%= numberOfRows %></p>
+	<!-- Modal for adding new package-->
+	<div class="modal fade" id="newPackage" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Ajouter un colis</h5>
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span>
+					</button>
 				</div>
-				<div class="mx-auto">
-					<ul class="pagination my-auto" data-number_of_rows="<%=numberOfRows %>">
-						<!--Here goes all the pages links-->
-					</ul>
-				</div>
-				<div class="my-auto">
-					<select class="custom-select custom-select-sm" id="rows_per_page">
-						<option value="5">5</option>
-						<option selected value="10">10</option>
-						<option value="20">20</option>
-						<option value="50">50</option>
-						<option value="100">100</option>
-					</select>
-				</div>
-			</div>
-		</nav>
-
-		<!-- Modal for adding new package-->
-		<div class="modal fade" id="newPackage" tabindex="-1" role="dialog">
-			<div class="modal-dialog modal-lg" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">Ajouter un colis</h5>
-						<button type="button" class="close" data-dismiss="modal">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<form action="/packages" method="POST">
-						<div class="modal-body">
-							<div class="form-group">
+				<form action="/packages" method="POST">
+					<div class="modal-body">
+						<div class="form-row">
+							<div class="form-group col-lg-8">
 								<label for="add_email">Adresse email</label>
 								<input type="email" list="studentsData" class="form-control email" id="add_email" placeholder="prenom.nom@imt-atlantique.net" name="email" autocomplete="off">
 							</div>
-							<div class="form-group">
+							<div class="form-group col-lg-4">
 								<label for="add_sender">Expéditeur</label>
 								<input type="text" class="form-control" id="add_sender" name="sender">
 							</div>
-							<label class="my-auto mr-5">Localisation</label>
-							<div class="form-inline mt-2 ml-2">
-								<div class="form-group form-check mr-auto">
-									<input class="form-check-input" type="radio" name="location" id="add_foyer" value="Foyer" checked>
-									<label class="form-check-label" for="add_foyer">Foyer</label>
-								</div>
-								<div class="form-group form-check mx-auto">
-									<input class="form-check-input" type="radio" name="location" id="add_boite_aux_lettres" value="Boîte aux lettres">
-									<label class="form-check-label" for="add_boite_aux_lettres">Boîte aux lettres</label>
-								</div>
-								<div class="form-group mx-auto">
-									<div class="form-group form-check mr-2">
-										<input class="form-check-input " type="radio" name="location" id="add_autre" value="autre">
-										<label class="form-check-label" for="add_autre">Autre :</label>
-									</div>
-									<input type="text" class="form-control" id="add_autre_input" name="location" disabled="true">
-								</div>
+						</div>
+						<label class="">Localisation</label>
+						<div class="form-row">
+							<div class="form-group form-check col-lg-3 ml-4 mr-lg-n4 my-auto">
+								<input class="form-check-input" type="radio" name="location" id="add_foyer" value="Foyer" checked>
+								<label class="form-check-label" for="add_foyer">Foyer</label>
+							</div>
+							<div class=" form-group form-check col-lg-3 my-auto ml-4 ml-lg-0">
+								<input class="form-check-input" type="radio" name="location" id="add_boite_aux_lettres" value="Boîte aux lettres">
+								<label class="form-check-label" for="add_boite_aux_lettres">Boîte aux lettres</label>
+							</div>
+							<div class="form-group form-check col-lg-1 my-auto ml-4 ml-lg-0">
+								<input class="form-check-input " type="radio" name="location" id="add_autre" value="autre">
+								<label class="form-check-label" for="add_autre">Autre</label>
+							</div>
+							<div class="col-lg-4">
+								<input type="text" class="form-control" id="add_autre_input" name="location" disabled="true">
 							</div>
 						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-							<input type="submit" class="btn btn-secondary" value="Confirmer">
+						<div class="form-group">
+							<label for="add_date">Date</label>
+							<input type="text" class="form-control" id="add_date" name="date" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-inputmask-placeholder="jj/mm/aaaa">
 						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-
-		<!-- Modal for modifying a package-->
-		<div class="modal fade" id="modifyPackage" tabindex="-1" role="dialog">
-			<div class="modal-dialog modal-lg" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">Modifier le colis</h5>
-						<button type="button" class="close" data-dismiss="modal">
-							<span aria-hidden="true">&times;</span>
-						</button>
 					</div>
-					<form action="" method="POST">
-						<div class="modal-body">
-							<div class="form-group">
-								<label for="modify_email">Adresse email</label>
-								<input type="email" list="studentsData" class="form-control email" id="modify_email" placeholder="prenom.nom@imt-atlantique.net" name="email" autocomplete="off">
-							</div>
-							<div class="form-group">
-								<label for="modify_sender">Expéditeur</label>
-								<input type="text" class="form-control" id="modify_sender" name="sender">
-							</div>
-							<label class="my-auto mr-5">Localisation</label>
-							<div class="form-inline mt-2 ml-2">
-								<div class="form-group form-check mr-auto">
-									<input class="form-check-input" type="radio" name="location" id="modify_foyer" value="Foyer">
-									<label class="form-check-label" for="modify_foyer">Foyer</label>
-								</div>
-								<div class="form-group form-check mx-auto">
-									<input class="form-check-input" type="radio" name="location" id="modify_boite_aux_lettres" value="Boîte aux lettres">
-									<label class="form-check-label" for="modify_boite_aux_lettres">Boîte aux lettres</label>
-								</div>
-								<div class="form-group mx-auto">
-									<div class="form-group form-check mr-2">
-										<input class="form-check-input " type="radio" name="location" id="modify_autre" value="autre">
-										<label class="form-check-label" for="modify_autre">Autre :</label>
-									</div>
-									<input type="text" class="form-control" id="modify_autre_input" name="location" disabled="true">
-								</div>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-							<input type="submit" class="btn btn-secondary" value="Confirmer">
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-
-		<!-- Modal for deleting a package-->
-		<div class="modal fade" id="deletePackage" tabindex="-1" role="dialog">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">Supprimer le colis</h5>
-						<button type="button" class="close" data-dismiss="modal">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<form action="" method="POST">
-						<div class="modal-body">
-							<p>Êtes-vous sûrs de bien vouloir supprimer ce colis ?</p>
-						</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-						<input type="submit" class="btn btn-secondary" value="Supprimer">
+						<input type="submit" class="btn btn-secondary" value="Confirmer">
 					</div>
 				</form>
-				</div>
 			</div>
 		</div>
-
 	</div>
+
+	<!-- Modal for modifying a package-->
+	<div class="modal fade" id="modifyPackage" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Modifier le colis</h5>
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form action="" method="POST">
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="modify_email">Adresse email</label>
+							<input type="email" list="studentsData" class="form-control email" id="modify_email" placeholder="prenom.nom@imt-atlantique.net" name="email" autocomplete="off">
+						</div>
+						<div class="form-group">
+							<label for="modify_sender">Expéditeur</label>
+							<input type="text" class="form-control" id="modify_sender" name="sender">
+						</div>
+						<label class="my-auto mr-5">Localisation</label>
+						<div class="form-inline mt-2 ml-2">
+							<div class="form-group form-check mr-auto">
+								<input class="form-check-input" type="radio" name="location" id="modify_foyer" value="Foyer">
+								<label class="form-check-label" for="modify_foyer">Foyer</label>
+							</div>
+							<div class="form-group form-check mx-auto">
+								<input class="form-check-input" type="radio" name="location" id="modify_boite_aux_lettres" value="Boîte aux lettres">
+								<label class="form-check-label" for="modify_boite_aux_lettres">Boîte aux lettres</label>
+							</div>
+							<div class="form-group mx-auto">
+								<div class="form-group form-check mr-2">
+									<input class="form-check-input " type="radio" name="location" id="modify_autre" value="autre">
+									<label class="form-check-label" for="modify_autre">Autre :</label>
+								</div>
+								<input type="text" class="form-control" id="modify_autre_input" name="location" disabled="true">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+						<input type="submit" class="btn btn-secondary" value="Confirmer">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal for deleting a package-->
+	<div class="modal fade" id="deletePackage" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Supprimer le colis</h5>
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form action="" method="POST">
+					<div class="modal-body">
+						<p>Êtes-vous sûrs de bien vouloir supprimer ce colis ?</p>
+					</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+					<input type="submit" class="btn btn-secondary" value="Supprimer">
+				</div>
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
+
 	<script src="/js/main.js"></script>
 <% include partials/footer %>

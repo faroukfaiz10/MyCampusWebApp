@@ -191,7 +191,13 @@ $.get("/emails", function(data){
     $(".email").typeahead({source:allEmails, items:5, fitToElement:true});
 })
 
+$(function () {
+    $('#datetimepicker4').datetimepicker({
+        format: 'L'
+    });
+});
 
+$("#add_date").inputmask();
 
 /* TO DOs */
 
