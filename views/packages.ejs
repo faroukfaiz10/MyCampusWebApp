@@ -42,7 +42,7 @@
 							<td class="align-middle"><%=package.shortDate %></td>
 							<td class="align-middle"><%=package.comment %></td>
 							<td>
-								<a href="#" class="badge badge-secondary mr-3 mb-1" data-id="<%=package.colis_id %>" data-email="<%=package.email %>" data-sender="<%=package.sender %>" data-location="<%=package.location %>" data-toggle="modal" data-target="#modifyPackage">
+								<a href="#" class="badge badge-secondary mr-3 mb-1" data-id="<%=package.colis_id %>" data-email="<%=package.email %>" data-sender="<%=package.sender %>" data-location="<%=package.location %>" data-date="<%=package.shortDate %>" data-comment="<%=package.comment %>" data-toggle="modal" data-target="#modifyPackage">
 									<i class="fas fa-pen text-light editLink"></i>
 								</a>
 								<a href="#" class="badge badge-secondary" data-id="<%=package.colis_id %>" data-toggle="modal" data-target="#deletePackage">
@@ -124,7 +124,7 @@
 						</div>
 						<div class="form-group">
 							<label for="add_comment">Commentaire</label>
-							<textarea class="form-control" rows="3" id="add_comment"></textarea>
+							<textarea class="form-control" rows="3" id="add_comment" name="comment"></textarea>
 						</div>
 
 					</div>
@@ -176,6 +176,14 @@
 							<div class="col-lg-4 col-6 mt-lg-0 mt-1">
 								<input type="text" class="form-control form-control-sm" id="modify_autre_input" name="location" disabled="true">
 							</div>
+						</div>
+						<div class="form-group mt-3">
+							<label for="modify_date">Date</label>
+							<input type="text" class="form-control col-md-6" id="modify_date" name="date" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-inputmask-placeholder="jj/mm/aaaa">
+						</div>
+						<div class="form-group">
+							<label for="modify_comment">Commentaire</label>
+							<textarea class="form-control" rows="3" id="modify_comment" name="comment"></textarea>
 						</div>
 					</div>
 					<div class="modal-footer">

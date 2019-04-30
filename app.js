@@ -57,14 +57,21 @@ function getLocation(locationObject){
     }
 }
 
+// Function for getting date object
+function getDate(dateString){
+    var day   = parseInt(dateString.slice(0,2));
+    var month = parseInt(dateString.slice(3,5));
+    var year  = parseInt(dateString.slice(6,10));
+    return new Date(year,month-1,day)
+}
+
 
 // Post request after adding new package
 app.post("/packages", function(req, res){
     // Data received from the form
-    args = [req.body.email, "En attente", req.body.sender, getLocation(req.body.location)]
-    // location: [ 'autre', 'Maisel' ] location: [ 'foyer', '' ] }
+    args = [req.body.email, "En attente", req.body.sender, getLocation(req.body.location), getDate(req.body.date), req.body.comment]
     // Adding data to packages table
-    client.query('INSERT INTO colis (email, status, sender, location) VALUES ($1, $2, $3, $4)', args, function (err,res2){
+    client.query('INSERT INTO colis (email, status, sender, location, date, comment) VALUES ($1, $2, $3, $4, $5, $6)', args, function (err,res2){
         if (err){
             console.log(err);
         } else{
@@ -77,9 +84,9 @@ app.post("/packages", function(req, res){
 // Post request after editing a package
 app.post("/packages/:id", function(req, res){
     // Data received from the form
-    args = [req.body.email, req.body.sender, req.params.id]
+    args = [req.body.email, req.body.sender, getLocation(req.body.location), getDate(req.body.date), req.body.comment, req.params.id]
     // Adding data to packages table
-    client.query('UPDATE colis SET email = $1, sender = $2 WHERE colis_id = $3;', args, function (err,res2){
+    client.query('UPDATE colis SET email = $1, sender = $2, location = $3, date = $4, comment = $5 WHERE colis_id = $6;', args, function (err,res2){
         if (err){
             console.log(err);
         } else{

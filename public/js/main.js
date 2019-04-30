@@ -1,9 +1,19 @@
 var $radioButtons = $("input[type=radio][name=location]")
 
+// Function for getting date object
+function getDate(dateString){
+    var day   = parseInt(dateString.slice(0,2));
+    var month = parseInt(dateString.slice(3,5));
+    var year  = parseInt(dateString.slice(6,10));
+    return new Date(year,month-1,day)
+}
+
 // Set the inputs values in the modify modal to the actual values of the package to modify
 $('#modifyPackage').on('show.bs.modal', function (event) {
     email    = $(event.relatedTarget).data("email");
     sender   = $(event.relatedTarget).data("sender");
+    date     = $(event.relatedTarget).data("date");
+    comment  = $(event.relatedTarget).data("comment");
     colis_id = $(event.relatedTarget).data("id");
     // Ckeck the correct radiobutton
     loc = $(event.relatedTarget).data("location");
@@ -22,6 +32,9 @@ $('#modifyPackage').on('show.bs.modal', function (event) {
     }
     $(this).find("input[type=text][name=sender]").val(sender);
     $(this).find("input[type=email]").val(email);
+    $(this).find("input[type=text][name=date]").val(date);
+    $(this).find("textarea").val(comment);
+    $("#modify_date").inputmask();
     // Set the post request path
     $(this).find("form").attr("action", "/packages/" + colis_id);
 });
