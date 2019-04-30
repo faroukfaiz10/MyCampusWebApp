@@ -21,7 +21,7 @@ $('#modifyPackage').on('show.bs.modal', function (event) {
         $("#modify_autre_input").val(loc);
     }
     $(this).find("input[type=text][name=sender]").val(sender);
-    $(this).find(".form-group input[type=email]").val(email);
+    $(this).find("input[type=email]").val(email);
     // Set the post request path
     $(this).find("form").attr("action", "/packages/" + colis_id);
 });
@@ -190,12 +190,6 @@ $.get("/emails", function(data){
     })
     $(".email").typeahead({source:allEmails, items:5, fitToElement:true});
 })
-
-$(function () {
-    $('#datetimepicker4').datetimepicker({
-        format: 'L'
-    });
-});
 
 $("#add_date").inputmask();
 
