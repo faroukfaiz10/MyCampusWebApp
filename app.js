@@ -111,12 +111,21 @@ app.post("/packages/delete/:id", function(req, res){
     });
 })
 
-// Post request from front-end java script to get emails for Typeahead functionality
+
+
+// Post request from front-end java script to get emails for Typeahead functionality and email verification
 app.get("/emails", function(req,res){
-    client.query('SELECT email_address FROM students', function(err, allEmails) {
+    client.query('SELECT email_address FROM students', function(err, allEmailsObjects) {
         if(err){
             console.log(err);
         } else{
+            allEmails=[]
+            allEmailsObjects.rows.forEach(function(emailObject){
+                // Some emails are equal to null
+                if (emailObject.hasOwnProperty("email_address") && emailObject.email_address != null ){ 
+                    allEmails.push(emailObject.email_address)
+                }
+            })
             res.send(allEmails)            
         }
     })

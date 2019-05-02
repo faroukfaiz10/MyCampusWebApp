@@ -1,12 +1,18 @@
 var $radioButtons = $("input[type=radio][name=location]")
 
-// Function for getting date object
-function getDate(dateString){
-    var day   = parseInt(dateString.slice(0,2));
-    var month = parseInt(dateString.slice(3,5));
-    var year  = parseInt(dateString.slice(6,10));
-    return new Date(year,month-1,day)
+// Function for getting today's date string
+function getToday(){
+    var today = new Date();
+    var day = String(today.getDate()).padStart(2, '0'); // day "5" --> day "05"
+    var month = String(today.getMonth() + 1).padStart(2, '0');  //January is 0
+    var year = today.getFullYear();
+    return day + '/' + month + '/' + year
 }
+
+// For setting today's date as default value in the date input in the create package form
+$('#newPackage').on('show.bs.modal', function () {
+    $(this).find("input[type=text][name=date]").val(getToday());
+})
 
 // Set the inputs values in the modify modal to the actual values of the package to modify
 $('#modifyPackage').on('show.bs.modal', function (event) {
@@ -38,6 +44,8 @@ $('#modifyPackage').on('show.bs.modal', function (event) {
     // Set the post request path
     $(this).find("form").attr("action", "/packages/" + colis_id);
 });
+
+
 
 // Set the post request path
 $('#deletePackage').on('show.bs.modal', function (event) {
@@ -81,6 +89,7 @@ function pagesLinksHtml (){
 }
 
 pagesLinksHtml()
+
 // Then create the variables related to pages links
 var $allLinks     = $('ul.pagination li a') // $allLinks = $pagesLinks + $nextLink + $previousLink
 var $pagesLinks   = $('ul.pagination li a.page-number')
@@ -192,19 +201,26 @@ $('.custom-select').on("change", function(){
     eventsHandlingLinks()
 })
 
-//Autocompletion for emails
+//Get request to Back end to retrieve emails array
 $.get("/emails", function(data){
-    var allEmails=[];
-    data.rows.forEach(function(emailObject){
-        // Some emails are equal to null
-        if (emailObject.hasOwnProperty("email_address") && emailObject.email_address != null ){ 
-            allEmails.push(emailObject.email_address)
+    var allEmails = data
+    // Autocompletion using emails array
+    // The typeahead function is inside the callback because it has to wait for the array to be defined
+    $(".email").typeahead({source:allEmails, items:5, fitToElement:true});
+    // Submit event to check if email is valid
+    // The submit event handler is inside the callback because we want the allEmails variable to be local
+    $("#add_package").submit(function(event){
+        if (!(allEmails.includes($($("input[type=email]")[0]).val()))){
+            event.preventDefault() // Ne pas envoyer la requête
+            $($("input[type=email]")[0]).addClass("is-invalid") // Montrer que le problème vient du champ email
         }
     })
-    $(".email").typeahead({source:allEmails, items:5, fitToElement:true});
 })
 
+// Input mask for the date input in the "add package" modal
 $("#add_date").inputmask();
+
+
 
 /* TO DOs */
 
@@ -212,10 +228,7 @@ $("#add_date").inputmask();
 // Search
 // max length input (30 chars expediteur)
 // Set the default value of the select input to 10 ? Or store it somewhere to retrieve it after reloading the page.
-// Problem when setting rowsperpage to 10 then reloading page : it stays at 10 without and displays only 5 + dosen't do nothing if we click on 10 again
 // calculate numberOfRows by front js
-// Date
-// Comment
 // compact-large
-// Tooltips
-// Email verification
+// Tooltips for large collumns
+// Email verification (red color, optimize emails search)

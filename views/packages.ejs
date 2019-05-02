@@ -88,16 +88,19 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form action="/packages" method="POST">
+				<form action="/packages" method="POST" id="add_package">
 					<div class="modal-body">
 						<div class="form-row">
 							<div class="form-group col-lg-8">
 								<label for="add_email">Adresse email</label>
-								<input type="email" list="studentsData" class="form-control email" id="add_email" placeholder="prenom.nom@imt-atlantique.net" name="email" autocomplete="off">
+								<input type="email" list="studentsData" class="form-control email" id="add_email" placeholder="prenom.nom@imt-atlantique.net" name="email" autocomplete="off" maxlength="60" required>
+								<div class="invalid-feedback">
+									L'email ne figure pas dans la base de données des étudiants de Brest.
+								</div>
 							</div>
 							<div class="form-group col-lg-4">
 								<label for="add_sender">Expéditeur</label>
-								<input type="text" class="form-control" id="add_sender" name="sender">
+								<input type="text" class="form-control" id="add_sender" name="sender" maxlength="30">
 							</div>
 						</div>
 						<label class="">Localisation</label>
@@ -111,11 +114,11 @@
 								<label class="form-check-label" for="add_boite_aux_lettres">Boîte aux lettres</label>
 							</div>
 							<div class="form-group form-check col-lg-1 my-auto ml-4 ml-lg-0">
-								<input class="form-check-input " type="radio" name="location" id="add_autre" value="autre">
+								<input class="form-check-input " type="radio" name="location" id="add_autre" value="autre" >
 								<label class="form-check-label" for="add_autre">Autre</label>
 							</div>
 							<div class="col-lg-4 col-6 mt-lg-0 mt-1">
-								<input type="text" class="form-control form-control-sm" id="add_autre_input" name="location" disabled="true">
+								<input type="text" class="form-control form-control-sm" id="add_autre_input" name="location" disabled="true" maxlength="50">
 							</div>
 						</div>
 						<div class="form-group mt-3">
@@ -124,7 +127,7 @@
 						</div>
 						<div class="form-group">
 							<label for="add_comment">Commentaire</label>
-							<textarea class="form-control" rows="3" id="add_comment" name="comment"></textarea>
+							<textarea class="form-control" rows="3" id="add_comment" name="comment" maxlength="100"></textarea>
 						</div>
 
 					</div>
@@ -152,11 +155,11 @@
 						<div class="form-row">
 							<div class="form-group col-lg-8">
 								<label for="modify_email">Adresse email</label>
-								<input type="email" list="studentsData" class="form-control email" id="modify_email" placeholder="prenom.nom@imt-atlantique.net" name="email" autocomplete="off">
+								<input type="email" list="studentsData" class="form-control email" id="modify_email" placeholder="prenom.nom@imt-atlantique.net" name="email" autocomplete="off" maxlength="60" required>
 							</div>
 							<div class="form-group col-lg-4">
 								<label for="modify_sender">Expéditeur</label>
-								<input type="text" class="form-control" id="modify_sender" name="sender">
+								<input type="text" class="form-control" id="modify_sender" name="sender" maxlength="30">
 							</div>
 						</div>
 						<label class="">Localisation</label>
@@ -174,7 +177,7 @@
 								<label class="form-check-label" for="modify_autre">Autre</label>
 							</div>
 							<div class="col-lg-4 col-6 mt-lg-0 mt-1">
-								<input type="text" class="form-control form-control-sm" id="modify_autre_input" name="location" disabled="true">
+								<input type="text" class="form-control form-control-sm" id="modify_autre_input" name="location" disabled="true" maxlength="50">
 							</div>
 						</div>
 						<div class="form-group mt-3">
@@ -183,7 +186,7 @@
 						</div>
 						<div class="form-group">
 							<label for="modify_comment">Commentaire</label>
-							<textarea class="form-control" rows="3" id="modify_comment" name="comment"></textarea>
+							<textarea class="form-control" rows="3" id="modify_comment" name="comment" maxlength="100"></textarea>
 						</div>
 					</div>
 					<div class="modal-footer">
