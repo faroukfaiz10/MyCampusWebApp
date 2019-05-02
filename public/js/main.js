@@ -53,6 +53,15 @@ $('#deletePackage').on('show.bs.modal', function (event) {
     $(this).find("form").attr("action", "/packages/delete/" + colis_id);
 });
 
+// Pour contrôler les boutons Compact et Large
+$("input[name=size]").on("change",function(){
+    if ($($("input[name=size]")[1]).is(":checked")){
+        $("table").removeClass("table-sm");
+    } else{
+        $("table").addClass("table-sm");
+    }
+})
+
 
 var rowsPerPage   = 10  // Starting value
 var numberOfRows  = $('ul.pagination').data("number_of_rows")
@@ -226,9 +235,6 @@ $("#add_date").inputmask();
 
 // Make the previous/next button look different when disabled
 // Search
-// max length input (30 chars expediteur)
-// Set the default value of the select input to 10 ? Or store it somewhere to retrieve it after reloading the page.
 // calculate numberOfRows by front js
 // compact-large
 // Tooltips for large collumns
-// Email verification (red color, optimize emails search)

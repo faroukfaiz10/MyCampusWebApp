@@ -32,7 +32,7 @@
 			</thead>
 			<tbody>
 				<% packagesList.forEach(function(package){ %>
-						<tr >
+						<tr>
 							<td class="align-middle"><strong><%=package.colis_id %></strong></td> <!--<th scope="row">-->
 							<td class="align-middle"><%=package.last_name %></td>
 							<td class="align-middle"><%=package.first_name %></td>
@@ -65,6 +65,16 @@
 				<ul class="pagination my-auto" data-number_of_rows="<%=numberOfRows %>">
 					<!--Here goes all the pages links-->
 				</ul>
+			</div>
+			<div class="mr-auto">
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" id="compact" value="compact" name="size" checked>
+					<label class="form-check-label" for="compact">Compact</label>
+				  </div>
+				  <div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" id="large" value="large" name="size">
+					<label class="form-check-label" for="large">Large</label>
+				  </div>
 			</div>
 			<div class="my-auto">
 				<select class="custom-select custom-select-sm" id="rows_per_page">
