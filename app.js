@@ -7,18 +7,10 @@ require("dotenv").config();
 var app = express();
 var passport = require("passport");
 var session = require("express-session");
+var RedisStore = require('connect-redis')(session);
 var bcrypt = require("bcrypt")
 var LocalStrategy = require("passport-local").Strategy;
 
-app.use(require("cookie-parser")());
-app.use(session({
-    store: new (require('connect-pg-simple')(session))(),
-    secret: "mySecretKey", 
-    resave: false, 
-    saveUninitialized: true
-})); // To change
-app.use(passport.initialize());
-app.use(passport.session());
 
 // Informations for connecting to database
 const client = new Client({
@@ -27,6 +19,19 @@ const client = new Client({
   })
 
 client.connect()
+
+
+app.use(require("cookie-parser")());
+app.use(session({
+    store: new RedisStore(client),
+    secret: "mySecretKey", 
+    resave: false, 
+    saveUninitialized: true
+})); // To change
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 // For parsing request objects from post requests
 app.use(bodyParser.urlencoded({extended: true}));
