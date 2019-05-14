@@ -1,5 +1,4 @@
 var $radioButtons = $("input[type=radio][name=location]")
-
 // Function for getting today's date string
 function getToday(){
     var today = new Date();
@@ -8,7 +7,6 @@ function getToday(){
     var year = today.getFullYear();
     return day + '/' + month + '/' + year
 }
-
 // For setting today's date as default value in the date input in the create package form
 $('#newPackage').on('show.bs.modal', function () {
     $(this).find("input[type=text][name=date]").val(getToday());
@@ -235,6 +233,6 @@ $("#add_date").inputmask();
 
 // Make the previous/next button look different when disabled
 // Search
+// Filter by 
 // calculate numberOfRows by front js
-// compact-large
 // Tooltips for large collumns

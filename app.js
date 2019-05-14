@@ -1,12 +1,19 @@
 var express = require("express");
-var app = express();
 var bodyParser = require("body-parser");
 var request = require('request');
 const { Client } = require('pg');
 require("dotenv").config();
 
-//Send a ping to the chatbot server
-request.post("https://mycampus-imt.herokuapp.com/ping")
+var app = express();
+var passport = require("passport");
+var session = require("express-session");
+var bcrypt = require("bcrypt")
+var LocalStrategy = require("passport-local").Strategy;
+
+app.use(require("cookie-parser")());
+app.use(session({secret: "mySecretKey", resave: false, saveUninitialized: true})); // To change
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Informations for connecting to database
 const client = new Client({
@@ -18,6 +25,137 @@ client.connect()
 
 // For parsing request objects from post requests
 app.use(bodyParser.urlencoded({extended: true}));
+
+
+function addAccount(usr,pwd){
+    try{
+        bcrypt.hash(pwd, 5, function(err,hashedPassword){
+            client.query("SELECT username FROM account WHERE username=$1", [usr], function(err, result) {
+                if(result.rows[0]){
+                    console.log("Username already in database!")
+                }
+                else{
+                    client.query("INSERT INTO account (username, password) VALUES ($1, $2)", [usr, hashedPassword], function(err, result) {
+                        if(err){
+                            console.log(err)
+                        }
+                        else { 
+                            console.log(result)
+                        }
+                    });
+                }    
+            });
+        });
+    } 
+    catch(e){
+        throw(e)
+    }
+}
+
+app.get("/secret", function (req, res) {
+    if(req.isAuthenticated()){
+        res.render("secret");
+    }
+    else{
+        res.redirect("/login");
+    }
+});
+
+app.get("/login", function (req, res, next) {
+    if (req.isAuthenticated()) {
+        res.redirect("/secret");
+    }
+    else{
+        res.render("login");
+    }
+});
+    
+app.post("/login", passport.authenticate("local", {
+    successRedirect: "/secret",
+    failureRedirect: "/login",
+    }), function(req, res) {
+        if (req.body.remember) {
+            req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // Cookie expires after 30 days
+        } else {
+            req.session.cookie.expires = false; // Cookie expires at end of session
+        }
+        res.redirect("/");
+});
+
+app.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/");
+});
+
+passport.use("local", new LocalStrategy({passReqToCallback : true}, (req, username, password, done) => {
+    try{
+        client.query("SELECT username, password FROM account WHERE username=$1", [username], function(err, result) {
+            if(err) {
+                return done(err)
+            } 
+            if(result.rows[0] == null){
+                console.log("Username not in database!")
+                return done(null, false);
+            }
+            else{
+                bcrypt.compare(password, result.rows[0].password, function(err, check) {
+                    if (err){
+                        console.log("Error while checking password");
+                        return done();
+                    }
+                    else if (check){
+                        return done(null, {username: result.rows[0].username});
+                    }
+                    else{
+                        console.log("Incorrect password!")
+                        return done(null, false);
+                    }
+                });
+            }
+        })
+    }
+    catch(e){
+        throw (e);
+    }
+}))
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+passport.deserializeUser(function(user, done) {
+    done(null, user);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Send a ping to the chatbot server
+request.post("https://mycampus-imt.herokuapp.com/ping")
+
+
+
+
  
 // The path to directory containing files
 app.use(express.static(__dirname + "/public"));
