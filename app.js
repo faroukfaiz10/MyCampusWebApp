@@ -23,7 +23,7 @@ client.connect()
 
 app.use(require("cookie-parser")());
 app.use(session({
-    store: new RedisStore(client),
+    store: new RedisStore({client:client}),
     secret: "mySecretKey", 
     resave: false, 
     saveUninitialized: true
