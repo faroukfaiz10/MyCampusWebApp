@@ -23,7 +23,7 @@ client.connect()
 
 app.use(require("cookie-parser")());
 app.use(session({
-    store: new RedisStore(client),
+    //store: new RedisStore(client),
     secret: "mySecretKey", 
     resave: false, 
     saveUninitialized: true
@@ -256,6 +256,6 @@ function shortDateFormat(longDate){
     return  longDate.getDate()+"/"+month+"/"+longDate.getFullYear()
 }
 
-app.listen(process.env.PORT, process.env.IP, function(){
+app.listen(process.env.PORT || 3000, process.env.IP, function(){
     console.log("Mycampus web app has started!")
 });
