@@ -11,7 +11,12 @@ var bcrypt = require("bcrypt")
 var LocalStrategy = require("passport-local").Strategy;
 
 app.use(require("cookie-parser")());
-app.use(session({secret: "mySecretKey", resave: false, saveUninitialized: true})); // To change
+app.use(session({
+    store: new (require('connect-pg-simple')(session))(),
+    secret: "mySecretKey", 
+    resave: false, 
+    saveUninitialized: true
+})); // To change
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -39,7 +44,7 @@ function addAccount(usr,pwd){
                         if(err){
                             console.log(err)
                         }
-                        else { 
+                        else {
                             console.log(result)
                         }
                     });
@@ -47,23 +52,12 @@ function addAccount(usr,pwd){
             });
         });
     } 
-    catch(e){
-        throw(e)
-    }
+    catch(e){throw(e)}
 }
-
-app.get("/secret", function (req, res) {
-    if(req.isAuthenticated()){
-        res.render("secret");
-    }
-    else{
-        res.redirect("/login");
-    }
-});
 
 app.get("/login", function (req, res, next) {
     if (req.isAuthenticated()) {
-        res.redirect("/secret");
+        res.redirect("/packages");
     }
     else{
         res.render("login");
@@ -71,7 +65,7 @@ app.get("/login", function (req, res, next) {
 });
     
 app.post("/login", passport.authenticate("local", {
-    successRedirect: "/secret",
+    successRedirect: "/packages",
     failureRedirect: "/login",
     }), function(req, res) {
         if (req.body.remember) {
@@ -102,10 +96,10 @@ passport.use("local", new LocalStrategy({passReqToCallback : true}, (req, userna
                     if (err){
                         console.log("Error while checking password");
                         return done();
-                    }
+                    } 
                     else if (check){
                         return done(null, {username: result.rows[0].username});
-                    }
+                    } 
                     else{
                         console.log("Incorrect password!")
                         return done(null, false);
@@ -125,37 +119,8 @@ passport.deserializeUser(function(user, done) {
     done(null, user);
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //Send a ping to the chatbot server
 request.post("https://mycampus-imt.herokuapp.com/ping")
-
-
-
-
  
 // The path to directory containing files
 app.use(express.static(__dirname + "/public"));
@@ -169,28 +134,35 @@ app.get("/", function(req, res){
 });
 
 app.get("/packages", function(req, res){
-    // Retrieve data (packages) from database 
-    client.query('SELECT * FROM colis JOIN students ON students.email_address = colis.email ORDER BY colis_id DESC', function(err, allPackages) {
-        if(err){
-            console.log(err);
-        } else{
-            packagesList=[]
-            // Add the (key,value) pair for shortDate format to all packages
-            allPackages.rows.forEach(function(package){
-                package.shortDate = shortDateFormat(package.date);
-                packagesList.push(package)
-            })
-            // Render the 'packages' page after retrieving data and number of rows
-            res.render("packages", {packagesList:packagesList, numberOfRows:allPackages.rows.length});
-        }
-    })
+    if(req.isAuthenticated()){
+        // Retrieve data (packages) from database 
+        client.query('SELECT * FROM colis JOIN students ON students.email_address = colis.email ORDER BY colis_id DESC', function(err, allPackages) {
+            if(err){
+                console.log(err);
+            } 
+            else{
+                packagesList=[]
+                // Add the (key,value) pair for shortDate format to all packages
+                allPackages.rows.forEach(function(package){
+                    package.shortDate = shortDateFormat(package.date);
+                    packagesList.push(package)
+                })
+                // Render the 'packages' page after retrieving data and number of rows
+                res.render("packages", {packagesList:packagesList, numberOfRows:allPackages.rows.length});
+            }
+        })
+    } 
+    else{
+        res.redirect("/login");
+    }
 })
 
 // Function for getting location
 function getLocation(locationObject){
     if (locationObject[0] == "autre"){
         return locationObject[1]
-    } else{
+    } 
+    else{
         return locationObject
     }
 }
@@ -212,7 +184,8 @@ app.post("/packages", function(req, res){
     client.query('INSERT INTO colis (email, status, sender, location, date, comment) VALUES ($1, $2, $3, $4, $5, $6)', args, function (err,res2){
         if (err){
             console.log(err);
-        } else{
+        } 
+        else{
             // Redirecting to packages page to display the package just added
             res.redirect("/packages");
         }
@@ -227,7 +200,8 @@ app.post("/packages/:id", function(req, res){
     client.query('UPDATE colis SET email = $1, sender = $2, location = $3, date = $4, comment = $5 WHERE colis_id = $6;', args, function (err,res2){
         if (err){
             console.log(err);
-        } else{
+        } 
+        else{
             // Redirecting to packages page to display the package just added
             res.redirect("/packages");
         }
@@ -242,7 +216,8 @@ app.post("/packages/delete/:id", function(req, res){
     client.query('DELETE FROM colis WHERE colis_id = $1;', args, function (err,res2){
         if (err){
             console.log(err);
-        } else{
+        } 
+        else{
             // Redirecting to packages page to display the package just added
             res.redirect("/packages");
         }
@@ -256,7 +231,8 @@ app.get("/emails", function(req,res){
     client.query('SELECT email_address FROM students', function(err, allEmailsObjects) {
         if(err){
             console.log(err);
-        } else{
+        } 
+        else{
             allEmails=[]
             allEmailsObjects.rows.forEach(function(emailObject){
                 // Some emails are equal to null

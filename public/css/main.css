@@ -30,3 +30,7 @@ body {
 li:hover{
     cursor: pointer;
 }
+#login_form{
+    max-width: 40%;
+    margin-top: 10%;
+}
