@@ -256,4 +256,6 @@ function shortDateFormat(longDate){
     return  longDate.getDate()+"/"+month+"/"+longDate.getFullYear()
 }
 
-app.listen('3000');
+app.listen(process.env.PORT, process.env.IP, function(){
+    console.log("Mycampus web app has started!")
+});
