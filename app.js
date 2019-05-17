@@ -7,7 +7,6 @@ require("dotenv").config();
 var app = express();
 var passport = require("passport");
 var session = require("express-session");
-var RedisStore = require('connect-redis')(session);
 var bcrypt = require("bcrypt")
 var LocalStrategy = require("passport-local").Strategy;
 
@@ -23,20 +22,59 @@ client.connect()
 
 app.use(require("cookie-parser")());
 app.use(session({
-    //store: new RedisStore(client),
-    secret: "mySecretKey", 
+    secret: "mySecretKey", // To change
     resave: false, 
     saveUninitialized: true
-})); // To change
+})); 
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+
+var object = 
+{ "compile": {
+        "options": {
+            // Which compiler to use. Can be latex, pdflatex, xelatex or lualatex
+            "compiler": "lualatex",
+            // How many seconds to wait before killing the process. Default is 60.
+            "timeout": 40 
+        },
+        // The main file to run LaTeX on
+        "rootResourcePath": "main.tex", 
+        // An array of files to include in the compilation. May have either the content
+        // passed directly, or a URL where it can be downloaded.
+        "resources": [{
+            "path": "main.tex",
+            "content": "\\documentclass{article}\n\\begin{document}\nHello World\n\\end{document}"
+        }]
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 // For parsing request objects from post requests
 app.use(bodyParser.urlencoded({extended: true}));
 
-
+// Function for adding an account given a username and a password as a string
 function addAccount(usr,pwd){
     try{
         bcrypt.hash(pwd, 5, function(err,hashedPassword){
@@ -68,7 +106,7 @@ app.get("/login", function (req, res, next) {
         res.render("login");
     }
 });
-    
+
 app.post("/login", passport.authenticate("local", {
     successRedirect: "/packages",
     failureRedirect: "/login",
@@ -83,7 +121,7 @@ app.post("/login", passport.authenticate("local", {
 
 app.get("/logout", function(req, res){
     req.logout();
-    res.redirect("/");
+    res.redirect("/login");
 });
 
 passport.use("local", new LocalStrategy({passReqToCallback : true}, (req, username, password, done) => {
@@ -117,9 +155,11 @@ passport.use("local", new LocalStrategy({passReqToCallback : true}, (req, userna
         throw (e);
     }
 }))
+
 passport.serializeUser(function(user, done) {
     done(null, user);
 });
+
 passport.deserializeUser(function(user, done) {
     done(null, user);
 });
@@ -130,7 +170,6 @@ request.post("https://mycampus-imt.herokuapp.com/ping")
 // The path to directory containing files
 app.use(express.static(__dirname + "/public"));
 
-// For using EJS to generate html documents
 app.set("view engine", "ejs");
 
 // Index page
@@ -259,3 +298,85 @@ function shortDateFormat(longDate){
 app.listen(process.env.PORT || 3000, process.env.IP, function(){
     console.log("Mycampus web app has started!")
 });
+
+var allpackageslistglobal = []
+client.query('SELECT first_name, last_name, sender, date FROM colis JOIN students ON students.email_address = colis.email ORDER BY colis_id DESC', function(err, allPackages) {
+    if(err){
+        console.log(err);
+    } 
+    else{
+        // Add the (key,value) pair for shortDate format to all packages
+        for(i=0; i<40; i++){    // To modify !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            allPackages.rows[i].shortDate = shortDateFormat(allPackages.rows[i].date)
+            allpackageslistglobal.push(allPackages.rows[i])
+        }     
+        //set the templateVariables
+        doc.setData({
+            packages : allpackageslistglobal
+        });
+
+        try {
+            // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+            doc.render()
+        }
+        catch (error) {
+            var e = {
+                message: error.message,
+                name: error.name,
+                stack: error.stack,
+                properties: error.properties,
+            }
+            console.log(JSON.stringify({error: e}));
+            // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+            throw error;
+        }
+
+        var buf = doc.getZip()
+                    .generate({type: 'nodebuffer'});
+
+        // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
+        fs.writeFileSync(path.resolve(__dirname, 'packagesoutput.docx'), buf);
+
+        // init docx engine
+        docx.init({
+            ND_DEV_ID: "5BFAVRPS5LB60RAHLTONI0MUTS",
+            ND_DEV_SECRET: "54427DDKQF3BEF6M57OP0DVPN4",
+            ENVIRONMENT: "NODE", // required
+            LAZY_INIT: true      // if set to false the WASM engine will be initialized right now, usefull pre-caching (like e.g. for AWS lambda)
+        }).catch( function(e) {
+            console.error(e);
+        });
+        
+        async function convertHelper(document, exportFct) {
+            const api = await docx.engine();
+            await api.load(document);
+            const arrayBuffer = await api[exportFct]();
+            await api.close();
+            return arrayBuffer;
+        }
+        
+        convertHelper(buf, "exportPDF").then((arrayBuffer) => {
+            fs.writeFileSync("packages.pdf", new Uint8Array(arrayBuffer));
+        }).catch((e) => {
+            console.error(e);
+        });
+    }
+})
+
+
+var JSZip = require('jszip');
+var Docxtemplater = require('docxtemplater');
+
+var fs = require('fs');
+var path = require('path');
+
+const docx = require("@nativedocuments/docx-wasm");
+
+//Load the docx file as a binary
+var content = fs
+    .readFileSync(path.resolve(__dirname, 'packages.docx'), 'binary');
+
+var zip = new JSZip(content);
+
+var doc = new Docxtemplater();
+doc.loadZip(zip);
