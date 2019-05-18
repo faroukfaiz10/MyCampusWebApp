@@ -10,6 +10,11 @@ var session = require("express-session");
 var bcrypt = require("bcrypt")
 var LocalStrategy = require("passport-local").Strategy;
 
+var JSZip = require('jszip');
+var Docxtemplater = require('docxtemplater');
+var fs = require('fs');
+var path = require('path');
+const docx = require("@nativedocuments/docx-wasm");
 
 // Informations for connecting to database
 const client = new Client({
@@ -19,7 +24,6 @@ const client = new Client({
 
 client.connect()
 
-
 app.use(require("cookie-parser")());
 app.use(session({
     secret: "mySecretKey", // To change
@@ -28,8 +32,6 @@ app.use(session({
 })); 
 app.use(passport.initialize());
 app.use(passport.session());
-
-
 
 var object = 
 { "compile": {
@@ -49,27 +51,6 @@ var object =
         }]
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // For parsing request objects from post requests
 app.use(bodyParser.urlencoded({extended: true}));
@@ -300,90 +281,74 @@ app.listen(process.env.PORT || 3000, process.env.IP, function(){
 });
 
 app.get("/packages.pdf", function(req,res){
-    client.query('SELECT first_name, last_name, sender, date FROM colis JOIN students ON students.email_address = colis.email ORDER BY colis_id DESC', function(err, allPackages) {
-        if(err){
-            console.log(err);
-        } 
-        else{
-            var allpackageslistglobal = []
-            // Add the (key,value) pair for shortDate format to all packages
-            for(i=0; i< allPackages.rows.length; i++){    
-                allPackages.rows[i].shortDate = shortDateFormat(allPackages.rows[i].date)
-                allpackageslistglobal.push(allPackages.rows[i])
-            }     
-            var JSZip = require('jszip');
-            var Docxtemplater = require('docxtemplater');
+    if(req.isAuthenticated()){
+        client.query('SELECT first_name, last_name, sender, date FROM colis JOIN students ON students.email_address = colis.email ORDER BY colis_id DESC', function(err, allPackages) {
+            if(err){
+                console.log(err);
+            } 
+            else{
+                // Add the short date to the packages info
+                for(i=0; i< allPackages.rows.length; i++){    
+                    allPackages.rows[i].shortDate = shortDateFormat(allPackages.rows[i].date)
+                }     
 
-            var fs = require('fs');
-            var path = require('path');
+                //Load the docx file as a binary
+                var content = fs.readFileSync(path.resolve(__dirname, 'packages.docx'), 'binary');
 
-            const docx = require("@nativedocuments/docx-wasm");
+                var zip = new JSZip(content);
 
-            //Load the docx file as a binary
-            var content = fs.readFileSync(path.resolve(__dirname, 'packages.docx'), 'binary');
+                var doc = new Docxtemplater();
+                doc.loadZip(zip);
 
-            var zip = new JSZip(content);
-
-            var doc = new Docxtemplater();
-            doc.loadZip(zip);
-
-            //set the templateVariables
-            doc.setData({
-                packages : allpackageslistglobal
-            });
-    
-            try {
-                // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-                doc.render()
-            }
-            catch (error) {
-                var e = {
-                    message: error.message,
-                    name: error.name,
-                    stack: error.stack,
-                    properties: error.properties,
-                }
-                console.log(JSON.stringify({error: e}));
-                // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
-                throw error;
-            }
-    
-            var buf = doc.getZip()
-                        .generate({type: 'nodebuffer'});
-    
-            // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-            fs.writeFileSync(path.resolve(__dirname, 'packagesoutput.docx'), buf);
-    
-            // init docx engine
-            docx.init({
-                ND_DEV_ID: "5BFAVRPS5LB60RAHLTONI0MUTS",
-                ND_DEV_SECRET: "54427DDKQF3BEF6M57OP0DVPN4",
-                ENVIRONMENT: "NODE", // required
-                LAZY_INIT: true      // if set to false the WASM engine will be initialized right now, usefull pre-caching (like e.g. for AWS lambda)
-            }).catch( function(e) {
-                console.error(e);
-            });
-            
-            async function convertHelper(document, exportFct) {
-                const api = await docx.engine();
-                await api.load(document);
-                const arrayBuffer = await api[exportFct]();
-                await api.close();
-                return arrayBuffer;
-            }
-            
-            convertHelper(buf, "exportPDF").then((arrayBuffer) => {
-                fs.writeFile("packages.pdf", new Uint8Array(arrayBuffer), (err)=>{
-                    var file = __dirname + "/packages.pdf";
-                    res.sendFile(file);
+                //Set the template variables
+                doc.setData({
+                    packages : allPackages.rows
                 });
-            }).catch((e) => {
-                console.error(e);
-            });
-            
-            //res.redirect("/packages")
-        }
-    })
+        
+                try {
+                    doc.render()
+                }
+                catch (error) {
+                    throw error;
+                }
+
+                // buf is a NodeJS buffer
+                var buf = doc.getZip().generate({type: 'nodebuffer'});
+        
+                fs.writeFileSync(path.resolve(__dirname, 'packagesoutput.docx'), buf);
+        
+                // Init docx engine
+                docx.init({
+                    ND_DEV_ID: "5BFAVRPS5LB60RAHLTONI0MUTS",
+                    ND_DEV_SECRET: "54427DDKQF3BEF6M57OP0DVPN4",
+                    ENVIRONMENT: "NODE",
+                    LAZY_INIT: true      // if set to false the WASM engine will be initialized right now, usefull pre-caching (like e.g. for AWS lambda)
+                }).catch( function(e) {
+                    console.error(e);
+                });
+                
+                async function convertHelper(document, exportFct) {
+                    const api = await docx.engine();
+                    await api.load(document);
+                    const arrayBuffer = await api[exportFct]();
+                    await api.close();
+                    return arrayBuffer;
+                }
+                
+                convertHelper(buf, "exportPDF").then((arrayBuffer) => {
+                    fs.writeFile("packages.pdf", new Uint8Array(arrayBuffer), (err)=>{
+                        var file = __dirname + "/packages.pdf";
+                        res.sendFile(file);
+                    });
+                }).catch((e) => {
+                    console.error(e);
+                });
+            }
+        })
+    } 
+    else{
+        res.redirect("/login");
+    }
 })
 
 
