@@ -10,18 +10,23 @@
   "author": "Farouk",
   "license": "ISC",
   "dependencies": {
+    "@nativedocuments/docx-wasm": "^2.2.8-1547344486",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
     "connect-pg-simple": "^5.0.0",
     "connect-redis": "^3.4.1",
     "cookie-parser": "^1.4.4",
+    "docxtemplater": "^3.10.1",
     "dotenv": "^7.0.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "express-session": "^1.16.1",
+    "fs": "0.0.1-security",
+    "jszip": "^3.2.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "path": "^0.12.7",
     "pg": "^7.9.0",
     "request": "^2.88.0"
   }
