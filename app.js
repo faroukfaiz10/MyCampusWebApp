@@ -351,5 +351,7 @@ app.get("/packages.pdf", function(req,res){
     }
 })
 
-
+app.get("/login2",function(err,res){
+    res.render("login2");
+})
 
