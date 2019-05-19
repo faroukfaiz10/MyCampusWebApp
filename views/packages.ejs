@@ -1,26 +1,45 @@
 <% include partials/header %>
 
+<!--Navbar-->
+<nav class="navbar fixed-top navbar-dark">
+	<div class="container">
+		<a class="navbar-brand py-0" href="#">
+			<img src="logo3.png" width="56" height="30" alt="">
+			<span id="brand">MyCampus</span>
+		</a>
+		<div class="navbar-nav">		
+			<a href="/logout" class="nav-item nav-link">Déconnexion</a>
+		</div>
+	</div>
+</nav>
+
 <div class="container ">
 
 	<!-- Header-->
-	<div class="d-flex bd-highlight mb-3">
-		<div class="mr-auto p-2">
+	<div class="d-flex flex-row justify-content-between mb-n3">
+		<div class="">
 			<h1>Liste des colis</h1>
 		</div>
-		<div>
-			<a href="/packages.pdf"> Télecharger la liste en PDF</a>
-		</div>
-		<div class="my-auto p-auto mr-5">
-			<button type="button" data-toggle="modal" data-target="#newPackage" class="m-auto btn btn-secondary">
-				Ajouter un colis
-			</button>
+		<div class="d-flex flex-row justify-content-between">
+			<div class="my-auto mr-1">
+				<a href="/packages.pdf" class="m-auto btn btn-sm btn-mycampus" id="pdfGenerator">
+					Télecharger la liste en PDF
+				</a>
+			</div>
+			<div class="spinner-border spinner-border-sm text-info my-auto mr-3 d-none" role="status">
+			</div>
+			<div class="my-auto">
+				<button type="button" data-toggle="modal" data-target="#newPackage" class="btn btn-sm btn-mycampus">
+					Ajouter un colis
+				</button>
+			</div>
 		</div>
 	</div>
 
 	<!-- EJS template for adding a row -->
 	<div class="table-responsive">
 		<table class="table table-hover table-sm">
-			<thead class="bg-secondary text-light">
+			<thead class="text-light">
 				<tr>
 					<th scope="col">Id</th>
 					<th scope="col">Nom</th>
@@ -45,10 +64,10 @@
 							<td class="align-middle"><%=package.shortDate %></td>
 							<td class="align-middle"><%=package.comment %></td>
 							<td>
-								<a href="#" class="badge badge-secondary mr-3 mb-1" data-id="<%=package.colis_id %>" data-email="<%=package.email %>" data-sender="<%=package.sender %>" data-location="<%=package.location %>" data-date="<%=package.shortDate %>" data-comment="<%=package.comment %>" data-toggle="modal" data-target="#modifyPackage">
+								<a href="#" class="badge badge-mycampus mr-3 mb-1" data-id="<%=package.colis_id %>" data-email="<%=package.email %>" data-sender="<%=package.sender %>" data-location="<%=package.location %>" data-date="<%=package.shortDate %>" data-comment="<%=package.comment %>" data-toggle="modal" data-target="#modifyPackage">
 									<i class="fas fa-pen text-light editLink"></i>
 								</a>
-								<a href="#" class="badge badge-secondary" data-id="<%=package.colis_id %>" data-toggle="modal" data-target="#deletePackage">
+								<a href="#" class="badge badge-mycampus" data-id="<%=package.colis_id %>" data-toggle="modal" data-target="#deletePackage">
 									<i class="fas fa-trash-alt text-light deleteLink"></i>
 								</a>
 							</td>
@@ -234,6 +253,12 @@
 		</div>
 	</div>
 </div>
+
+<nav class="navbar fixed-bottom navbar-dark bg-dark">
+	<span class="navbar-text p-0 mx-auto">
+		MyCampus © 2018-2019
+	</span>
+</nav>
 
 	<script src="/js/main.js"></script>
 <% include partials/footer %>

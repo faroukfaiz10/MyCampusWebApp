@@ -23,7 +23,7 @@
     "express": "^4.16.4",
     "express-session": "^1.16.1",
     "fs": "0.0.1-security",
-    "jszip": "^3.2.1",
+    "jszip": "^2.6.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
