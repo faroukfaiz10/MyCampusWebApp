@@ -95,7 +95,9 @@ function pagesLinksHtml (){
     $("ul.pagination").html(pagesHtml);
 }
 
+
 pagesLinksHtml()
+
 
 // Then create the variables related to pages links
 var $allLinks     = $('ul.pagination li a') // $allLinks = $pagesLinks + $nextLink + $previousLink
@@ -104,10 +106,12 @@ var $nextLink     = $($allLinks[$allLinks.length-1])
 var $previousLink = $($allLinks[0])
 var actualPage    = 1
 
+showPages()
 function eventsHandlingLinks(){
     // Event listener on the pages links
     $pagesLinks.on("click", function(event) {
         actualPage = $(this).text()
+        showPages()
         // Start by hiding all rows
         $('table').find('tbody tr').hide();
 
@@ -207,6 +211,7 @@ $('.custom-select').on("change", function(){
     rowsDisplayed = Math.min($tableRows.length,rowsPerPage)
     $("#rows_displayed").text(rowsDisplayed);
     eventsHandlingLinks()
+    showPages()
 })
 
 //Get request to Back end to retrieve emails array
@@ -228,7 +233,34 @@ $.get("/emails", function(data){
 // Input mask for the date input in the "add package" modal
 $("#add_date").inputmask();
 
+function range(start, end) {
+    var result = [];
+    for (i = start; i <= end; i++) {
+        result.push(i);
+    }
+    return result;
+}
 
+function pagesToShow (){
+    if (actualPage == 1 || actualPage == 2 || actualPage == 3){
+        return range(1,Math.min(5,numberOfPages))
+    }
+    else if (actualPage == numberOfPages || actualPage == numberOfPages-1 || actualPage == numberOfPages-2){
+        return range(Math.max(1,numberOfPages-4),numberOfPages)
+    }
+    else {
+        return range(actualPage-2,Math.min(parseInt(actualPage,10)+2,numberOfPages))
+    }
+}
+
+function showPages(){
+    $pagesLinks.hide()
+    start = pagesToShow()[0]
+    end = pagesToShow()[pagesToShow().length-1]
+    for(var i=start; i <= end; i++){
+        $($pagesLinks[i-1]).show()
+    }
+}
 
 
 

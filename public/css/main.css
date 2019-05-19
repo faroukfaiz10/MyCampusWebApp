@@ -62,6 +62,13 @@ nav.fixed-top{
     background-color: #009eb6;
 }
 
+ul.pagination li a{
+    padding-left: 9px;
+    padding-right: 9px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
 ul.pagination li a:hover{
     background-color: #009eb6 !important;
 }
