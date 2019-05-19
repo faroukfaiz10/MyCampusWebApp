@@ -338,7 +338,7 @@ app.get("/packages.pdf", function(req,res){
                 convertHelper(buf, "exportPDF").then((arrayBuffer) => {
                     fs.writeFile("packages.pdf", new Uint8Array(arrayBuffer), (err)=>{
                         var file = __dirname + "/packages.pdf";
-                        res.sendFile(file);
+                        res.download(file)
                     });
                 }).catch((e) => {
                     console.error(e);
@@ -349,9 +349,5 @@ app.get("/packages.pdf", function(req,res){
     else{
         res.redirect("/login");
     }
-})
-
-app.get("/login2",function(err,res){
-    res.render("login2");
 })
 

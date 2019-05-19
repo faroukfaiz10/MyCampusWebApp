@@ -87,11 +87,11 @@ $radioButtons.on("change",function(){
 
 // Generating Html for the pages links
 function pagesLinksHtml (){
-    pagesHtml = "<li class='page-item'><a class='page-link bg-mycampus text-light'>Précédent</a></li>"
+    pagesHtml = "<li class='page-item'><a class='page-link bg-mycampus text-white'>Précédent</a></li>"
     for(var i=1; i <= numberOfPages; i++){
-        pagesHtml += "<li class=''><a class='page-link bg-mycampus text-light page-number'>"+ i +"</a></li>"
+        pagesHtml += "<li class=''><a class='page-link bg-mycampus text-white page-number'>"+ i +"</a></li>"
     };
-    pagesHtml += "<li class='page-item'><a class='page-link bg-mycampus text-light'>Suivant</a></li>"
+    pagesHtml += "<li class='page-item'><a class='page-link bg-mycampus text-white'>Suivant</a></li>"
     $("ul.pagination").html(pagesHtml);
 }
 
@@ -115,22 +115,23 @@ function eventsHandlingLinks(){
         if(actualPage == 1){
             // On the page 1, the button 'previous' is disabled
             $previousLink.parent().css("cursor", "default")
-            $previousLink.parent().addClass("disabled-mycampus")
+            $previousLink.addClass("disabled-mycampus")
+            
             $nextLink.parent().css("cursor", "pointer")
-            $nextLink.parent().removeClass("disabled-mycampus")
+            $nextLink.removeClass("disabled-mycampus")
         } else if (actualPage == numberOfPages){
             // On the last page, the button 'next' is disabled
             $nextLink.parent().css("cursor", "default");
-            $nextLink.parent().addClass("disabled-mycampus")
+            $nextLink.addClass("disabled-mycampus")
             $previousLink.parent().css("cursor", "pointer")
-            $previousLink.parent().removeClass("disabled-mycampus")
+            $previousLink.removeClass("disabled-mycampus")
         }
         else{
             // Otherwise, the buttons 'next' and 'previous' are available
             $previousLink.parent().css("cursor", "pointer")
             $nextLink.parent().css("cursor", "pointer")
-            $previousLink.parent().removeClass("disabled-mycampus")
-            $nextLink.parent().removeClass("disabled-mycampus")
+            $previousLink.removeClass("disabled-mycampus")
+            $nextLink.removeClass("disabled-mycampus")
         }
 
         //Make all pages links not looking active
@@ -177,7 +178,7 @@ $($pagesLinks[0]).addClass("bg-mycampus-active");
 
 // The previous button is disabled in the beginning
 $previousLink.parent().css("cursor", "default")
-$previousLink.parent().addClass("disabled-mycampus")
+$previousLink.addClass("disabled-mycampus")
 
 // Set up event handling for pages links
 eventsHandlingLinks()
@@ -202,7 +203,7 @@ $('.custom-select').on("change", function(){
     $previousLink = $($allLinks[0])
     $($pagesLinks[0]).addClass("bg-mycampus-active"); // Page 1 link looks active
     $previousLink.parent().css("cursor", "default") // The previous button is disabled in the beginning
-    $previousLink.parent().addClass("disabled-mycampus")
+    $previousLink.addClass("disabled-mycampus")
     rowsDisplayed = Math.min($tableRows.length,rowsPerPage)
     $("#rows_displayed").text(rowsDisplayed);
     eventsHandlingLinks()
@@ -227,10 +228,9 @@ $.get("/emails", function(data){
 // Input mask for the date input in the "add package" modal
 $("#add_date").inputmask();
 
-$("#pdfGenerator").on("click", function(){
-    $(".spinner-border").removeClass("d-none");
-    $(".spinner-border").addClass("d-inline-block")
-})
+
+
+
 
 /* TO DOs */
 

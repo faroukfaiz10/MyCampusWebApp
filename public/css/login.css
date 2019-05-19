@@ -20,9 +20,11 @@ body {
   padding: 15px;
   margin: auto;
 }
+
 .form-signin .checkbox {
   font-weight: 400;
 }
+
 .form-signin .form-control {
   position: relative;
   box-sizing: border-box;
@@ -30,22 +32,36 @@ body {
   padding: 10px;
   font-size: 16px;
 }
+
 .form-signin .form-control:focus {
   z-index: 2;
 }
+
 .form-signin input[type="text"] {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
+
 .form-signin input[type="password"] {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-button{
-    background-color: #00bcd7 !important;
+
+.btn-mycampus {
+  color: #fff;
+  background-color: #00b2ce;
+  border-color: #00b2ce;
+  outline: none;
 }
-button:hover{
-    background-color: #00a2ba !important;
+
+.btn-mycampus:hover {
+  color: #fff;
+  background-color: #009eb6;
+  border-color: #009eb6;
+}
+
+.btn-mycampus:focus, .btn-mycampus.focus {
+  box-shadow: 0 0 0 0;
 }

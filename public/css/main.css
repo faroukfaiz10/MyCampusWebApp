@@ -66,10 +66,10 @@ ul.pagination li a:hover{
     background-color: #009eb6 !important;
 }
 
-/* doesn't work */
-.disabled-mycampus a:hover{
-    background-color: #00b2ce !important;
-}
+
+.disabled-mycampus{
+    background-color: #009eb6 !important;
+}*/
 
 .badge-mycampus {
     color: #fff;
@@ -83,6 +83,18 @@ a.badge-mycampus:hover, a.badge-mycampus:focus {
 a[href='/logout']{
     color:#d6d6d6 !important;
 }
+
 a[href='/logout']:hover{
     color:#fff !important;
+}
+
+i{
+    font-size: 0.8rem !important;
+}
+
+a.badge{
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 1px;
+    padding-bottom: 1px;
 }
