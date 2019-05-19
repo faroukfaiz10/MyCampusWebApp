@@ -9,6 +9,7 @@ var passport = require("passport");
 var session = require("express-session");
 var bcrypt = require("bcrypt")
 var LocalStrategy = require("passport-local").Strategy;
+var flash = require("connect-flash");
 
 var JSZip = require('jszip');
 var Docxtemplater = require('docxtemplater');
@@ -24,6 +25,7 @@ const client = new Client({
 
 client.connect()
 
+app.use(flash());
 app.use(require("cookie-parser")());
 app.use(session({
     secret: "mySecretKey", // To change
@@ -32,25 +34,6 @@ app.use(session({
 })); 
 app.use(passport.initialize());
 app.use(passport.session());
-
-var object = 
-{ "compile": {
-        "options": {
-            // Which compiler to use. Can be latex, pdflatex, xelatex or lualatex
-            "compiler": "lualatex",
-            // How many seconds to wait before killing the process. Default is 60.
-            "timeout": 40 
-        },
-        // The main file to run LaTeX on
-        "rootResourcePath": "main.tex", 
-        // An array of files to include in the compilation. May have either the content
-        // passed directly, or a URL where it can be downloaded.
-        "resources": [{
-            "path": "main.tex",
-            "content": "\\documentclass{article}\n\\begin{document}\nHello World\n\\end{document}"
-        }]
-    }
-}
 
 // For parsing request objects from post requests
 app.use(bodyParser.urlencoded({extended: true}));
@@ -84,13 +67,14 @@ app.get("/login", function (req, res, next) {
         res.redirect("/packages");
     }
     else{
-        res.render("login");
+        res.render("login",{messages: {danger: req.flash("danger"), warning: req.flash("warning"), success: req.flash("success")}});
     }
 });
 
 app.post("/login", passport.authenticate("local", {
     successRedirect: "/packages",
     failureRedirect: "/login",
+    failureFlash: true
     }), function(req, res) {
         if (req.body.remember) {
             req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // Cookie expires after 30 days
@@ -113,6 +97,7 @@ passport.use("local", new LocalStrategy({passReqToCallback : true}, (req, userna
             } 
             if(result.rows[0] == null){
                 console.log("Username not in database!")
+                req.flash('danger', "Identifiants incorrects, veuillez réessayer!");
                 return done(null, false);
             }
             else{
@@ -125,6 +110,7 @@ passport.use("local", new LocalStrategy({passReqToCallback : true}, (req, userna
                         return done(null, {username: result.rows[0].username});
                     } 
                     else{
+                        req.flash('danger', "Identifiants incorrects, veuillez réessayer!");
                         console.log("Incorrect password!")
                         return done(null, false);
                     }

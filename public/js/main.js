@@ -266,8 +266,6 @@ function showPages(){
 
 /* TO DOs */
 
-// Make the previous/next button look different when disabled
 // Search
 // Filter by 
 // calculate numberOfRows by front js
-// Tooltips for large collumns
