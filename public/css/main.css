@@ -23,6 +23,7 @@ h1{
     font-size: 12px;
     margin: 2px 1px;
 }
+
 body {
     /* To correct the bug of body shifting to left when closing modal*/
     padding-left: 0 !important ;
@@ -87,21 +88,48 @@ a.badge-mycampus:hover, a.badge-mycampus:focus {
     color: #fff;
     background-color: #009eb6;
 }
-a[href='/logout']{
+a[href='/logout'] {
     color:#d6d6d6 !important;
+
 }
 
 a[href='/logout']:hover{
     color:#fff !important;
+
 }
 
 i{
     font-size: 0.8rem !important;
+
 }
 
-a.badge{
+a.badge {
     padding-left: 2px;
     padding-right: 2px;
     padding-top: 1px;
     padding-bottom: 1px;
+}
+
+.deleteLink span, .editLink span{
+    position: absolute;
+    margin-top: 10px;
+    padding: .55rem 1rem;
+    font-family: 'Varela Round', sans-serif;
+    font-size: 0.80rem;
+    font-weight: 800;
+    white-space: nowrap;
+    color: white;
+    border-radius: 50px;
+    background-color: #00b2ce;
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
+  }
+
+.deleteLink:hover > span, .editLink:hover > span{
+    opacity: 0.9;
 }

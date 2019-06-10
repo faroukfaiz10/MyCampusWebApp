@@ -31,6 +31,11 @@ body {
   height: auto;
   padding: 10px;
   font-size: 16px;
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border-radius: 6px;
 }
 
 .form-signin .form-control:focus {

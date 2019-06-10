@@ -43,7 +43,8 @@
 					<th scope="col">Nom</th>
 					<th scope="col">Prénom</th>
 					<th scope="col">Email</th>
-					<th scope="col">Expéditeur</th>
+					<th scope="col">Transporteur</th>
+					<th scope="col">N° de colis</th>
 					<th scope="col">Localisation</th>
 					<th scope="col">Date</th>
 					<th scope="col">Commentaire</th>
@@ -58,15 +59,20 @@
 							<td class="align-middle"><%=package.first_name %></td>
 							<td class="align-middle"><%=package.email %></td>
 							<td class="align-middle"><%=package.sender %></td>
+							<td class="align-middle"><%=package.packagenumber %></td>
 							<td class="align-middle"><%=package.location %></td>
 							<td class="align-middle"><%=package.shortDate %></td>
 							<td class="align-middle"><%=package.comment %></td>
 							<td>
-								<a href="#" class="badge badge-mycampus mr-3 mb-1" data-id="<%=package.colis_id %>" data-email="<%=package.email %>" data-sender="<%=package.sender %>" data-location="<%=package.location %>" data-date="<%=package.shortDate %>" data-comment="<%=package.comment %>" data-toggle="modal" data-target="#modifyPackage">
-									<i class="fas fa-pen text-light editLink"></i>
+								<a href="#" class="badge badge-mycampus mr-3 mb-1" data-id="<%=package.colis_id %>" data-email="<%=package.email %>" data-sender="<%=package.sender %>" data-packagenumber="<%=package.packagenumber %>" data-location="<%=package.location %>" data-date="<%=package.shortDate %>" data-comment="<%=package.comment %>" data-toggle="modal" data-target="#modifyPackage">
+									<i class="fas fa-pen text-light editLink">
+										<span>Modifier</span>
+									</i>
 								</a>
 								<a href="#" class="badge badge-mycampus " data-id="<%=package.colis_id %>" data-toggle="modal" data-target="#deletePackage">
-									<i class="fas fa-trash-alt text-light deleteLink"></i>
+									<i class="fas fa-trash-alt text-light deleteLink">
+										<span>Supprimer</span>
+									</i>
 								</a>
 							</td>
 						</tr>
@@ -121,16 +127,20 @@
 				<form action="/packages" method="POST" id="add_package">
 					<div class="modal-body">
 						<div class="form-row">
-							<div class="form-group col-lg-8">
+							<div class="form-group col-lg-6">
 								<label for="add_email">Adresse email</label>
 								<input type="email" list="studentsData" class="form-control email" id="add_email" placeholder="prenom.nom@imt-atlantique.net" name="email" autocomplete="off" maxlength="60" required>
 								<div class="invalid-feedback">
 									L'email ne figure pas dans la base de données des étudiants de Brest.
 								</div>
 							</div>
-							<div class="form-group col-lg-4">
-								<label for="add_sender">Expéditeur</label>
+							<div class="form-group col-lg-3">
+								<label for="add_sender">Transporteur</label>
 								<input type="text" class="form-control" id="add_sender" name="sender" maxlength="30">
+							</div>
+							<div class="form-group col-lg-3">
+								<label for="add_packageNumber">Numéro de colis</label>
+								<input type="text" class="form-control" id="add_packageNumber" name="packageNumber" maxlength="50">
 							</div>
 						</div>
 						<label class="">Localisation</label>
@@ -155,11 +165,10 @@
 							<label for="add_date">Date</label>
 							<input type="text" class="form-control col-md-6" id="add_date" name="date" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-inputmask-placeholder="jj/mm/aaaa">
 						</div>
-						<div class="form-group">
+						<div class="form-group mt-2">
 							<label for="add_comment">Commentaire</label>
 							<textarea class="form-control" rows="3" id="add_comment" name="comment" maxlength="100"></textarea>
 						</div>
-
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-mycampus" data-dismiss="modal">Fermer</button>
@@ -183,13 +192,17 @@
 				<form action="" method="POST">
 					<div class="modal-body">
 						<div class="form-row">
-							<div class="form-group col-lg-8">
+							<div class="form-group col-lg-6">
 								<label for="modify_email">Adresse email</label>
 								<input type="email" list="studentsData" class="form-control email" id="modify_email" placeholder="prenom.nom@imt-atlantique.net" name="email" autocomplete="off" maxlength="60" required>
 							</div>
-							<div class="form-group col-lg-4">
-								<label for="modify_sender">Expéditeur</label>
-								<input type="text" class="form-control" id="modify_sender" name="sender" maxlength="30">
+							<div class="form-group col-lg-3">
+								<label for="add_sender">Transporteur</label>
+								<input type="text" class="form-control" id="add_sender" name="sender" maxlength="30">
+							</div>
+							<div class="form-group col-lg-3">
+								<label for="add_packageNumber">Numéro de colis</label>
+								<input type="text" class="form-control" id="add_packageNumber" name="packageNumber" maxlength="50">
 							</div>
 						</div>
 						<label class="">Localisation</label>
@@ -210,11 +223,13 @@
 								<input type="text" class="form-control form-control-sm" id="modify_autre_input" name="location" disabled="true" maxlength="50">
 							</div>
 						</div>
+
 						<div class="form-group mt-3">
 							<label for="modify_date">Date</label>
 							<input type="text" class="form-control col-md-6" id="modify_date" name="date" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-inputmask-placeholder="jj/mm/aaaa">
 						</div>
-						<div class="form-group">
+
+						<div class="form-group mt-2">
 							<label for="modify_comment">Commentaire</label>
 							<textarea class="form-control" rows="3" id="modify_comment" name="comment" maxlength="100"></textarea>
 						</div>

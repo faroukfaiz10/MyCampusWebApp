@@ -190,9 +190,9 @@ function getDate(dateString){
 // Post request after adding new package
 app.post("/packages", function(req, res){
     // Data received from the form
-    args = [req.body.email, "En attente", req.body.sender, getLocation(req.body.location), getDate(req.body.date), req.body.comment]
+    args = [req.body.email, "En attente", req.body.sender, getLocation(req.body.location), getDate(req.body.date), req.body.comment, req.body.packageNumber]
     // Adding data to packages table
-    client.query('INSERT INTO colis (email, status, sender, location, date, comment) VALUES ($1, $2, $3, $4, $5, $6)', args, function (err,res2){
+    client.query('INSERT INTO colis (email, status, sender, location, date, comment, packagenumber) VALUES ($1, $2, $3, $4, $5, $6, $7)', args, function (err,res2){
         if (err){
             console.log(err);
         } 
@@ -206,9 +206,9 @@ app.post("/packages", function(req, res){
 // Post request after editing a package
 app.post("/packages/:id", function(req, res){
     // Data received from the form
-    args = [req.body.email, req.body.sender, getLocation(req.body.location), getDate(req.body.date), req.body.comment, req.params.id]
+    args = [req.body.email, req.body.sender, getLocation(req.body.location), getDate(req.body.date), req.body.comment, req.body.packageNumber, req.params.id]
     // Adding data to packages table
-    client.query('UPDATE colis SET email = $1, sender = $2, location = $3, date = $4, comment = $5 WHERE colis_id = $6;', args, function (err,res2){
+    client.query('UPDATE colis SET email = $1, sender = $2, location = $3, date = $4, comment = $5, packagenumber = $6 WHERE colis_id = $7;', args, function (err,res2){
         if (err){
             console.log(err);
         } 
@@ -268,7 +268,7 @@ app.listen(process.env.PORT || 3000, process.env.IP, function(){
 
 app.get("/packages.pdf", function(req,res){
     if(req.isAuthenticated()){
-        client.query('SELECT first_name, last_name, sender, date FROM colis JOIN students ON students.email_address = colis.email ORDER BY colis_id DESC', function(err, allPackages) {
+        client.query('SELECT first_name, last_name, sender, date, packagenumber FROM colis JOIN students ON students.email_address = colis.email ORDER BY colis_id DESC', function(err, allPackages) {
             if(err){
                 console.log(err);
             } 
@@ -279,7 +279,7 @@ app.get("/packages.pdf", function(req,res){
                 }     
 
                 //Load the docx file as a binary
-                var content = fs.readFileSync(path.resolve(__dirname, 'packages.docx'), 'binary');
+                var content = fs.readFileSync(path.resolve(__dirname, 'packages2.docx'), 'binary');
 
                 var zip = new JSZip(content);
 

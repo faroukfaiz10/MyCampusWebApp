@@ -14,11 +14,12 @@ $('#newPackage').on('show.bs.modal', function () {
 
 // Set the inputs values in the modify modal to the actual values of the package to modify
 $('#modifyPackage').on('show.bs.modal', function (event) {
-    email    = $(event.relatedTarget).data("email");
-    sender   = $(event.relatedTarget).data("sender");
-    date     = $(event.relatedTarget).data("date");
-    comment  = $(event.relatedTarget).data("comment");
-    colis_id = $(event.relatedTarget).data("id");
+    email         = $(event.relatedTarget).data("email");
+    sender        = $(event.relatedTarget).data("sender");
+    date          = $(event.relatedTarget).data("date");
+    comment       = $(event.relatedTarget).data("comment");
+    packageNumber = $(event.relatedTarget).data("packagenumber");
+    colis_id      = $(event.relatedTarget).data("id");
     // Ckeck the correct radiobutton
     loc = $(event.relatedTarget).data("location");
     if (loc == "Foyer"){
@@ -37,6 +38,7 @@ $('#modifyPackage').on('show.bs.modal', function (event) {
     $(this).find("input[type=text][name=sender]").val(sender);
     $(this).find("input[type=email]").val(email);
     $(this).find("input[type=text][name=date]").val(date);
+    $(this).find("input[type=text][name=packageNumber]").val(packageNumber);
     $(this).find("textarea").val(comment);
     $("#modify_date").inputmask();
     // Set the post request path
