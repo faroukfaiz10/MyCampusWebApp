@@ -64,7 +64,7 @@ function addAccount(usr,pwd){
 
 app.get("/login", function (req, res, next) {
     if (req.isAuthenticated()) {
-        res.redirect("/packages");
+        res.redirect("/");
     }
     else{
         res.render("login",{messages: {danger: req.flash("danger"), warning: req.flash("warning"), success: req.flash("success")}});
@@ -72,7 +72,7 @@ app.get("/login", function (req, res, next) {
 });
 
 app.post("/login", passport.authenticate("local", {
-    successRedirect: "/packages",
+    successRedirect: "/",
     failureRedirect: "/login",
     failureFlash: true
     }), function(req, res) {
@@ -140,11 +140,11 @@ app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 
 // Index page
-app.get("/", function(req, res){
+/*app.get("/", function(req, res){
     res.render("landing");
-});
+});*/
 
-app.get("/packages", function(req, res){
+app.get("/", function(req, res){
     if(req.isAuthenticated()){
         // Retrieve data (packages) from database 
         client.query('SELECT * FROM colis JOIN students ON students.email_address = colis.email ORDER BY colis_id DESC', function(err, allPackages) {
@@ -198,7 +198,7 @@ app.post("/packages", function(req, res){
         } 
         else{
             // Redirecting to packages page to display the package just added
-            res.redirect("/packages");
+            res.redirect("/");
         }
     });
 })
@@ -214,7 +214,7 @@ app.post("/packages/:id", function(req, res){
         } 
         else{
             // Redirecting to packages page to display the package just added
-            res.redirect("/packages");
+            res.redirect("/");
         }
     });
 })
@@ -230,7 +230,7 @@ app.post("/packages/delete/:id", function(req, res){
         } 
         else{
             // Redirecting to packages page to display the package just added
-            res.redirect("/packages");
+            res.redirect("/");
         }
     });
 })
